@@ -1,133 +1,364 @@
-<html lang="en">
+<!DOCTYPE html>
+<html lang="bs">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>EcoTrack</title>
-    <link rel="stylesheet" href="../style/stil.css">
+    <link rel="stylesheet" href="../css/stil.css">
 </head>
+
 <body>
+
+    <!-- ZAGLAVLJE APLIKACIJE -->
     <header class="site-header">
 
         <div class="logo">
-            <img src="../slike/ecotrack-logo.png" alt="Logo stranice EcoTrack, sadrzi zeleni list.">
+            <img src="../slike/ecotrack-logo.png" alt="">
             <h1>EcoTrack</h1>
         </div>
 
-        <nav class="main-nav" >
+        <nav class="main-nav" aria-label="Glavna navigacija">
             <ul>
-                <li><a href="#pocetna">Početna</a></li>
-                <li><a href="#aktivnosti">Aktivnosti</a></li>
+                <li><a href="#pocetna" aria-current="page">Početna</a></li>
                 <li><a href="#statistika">Statistika</a></li>
-                <li><a href="#kontakt">Kontakt</a></li>
-                <li><a href="#onama">O nama</a></li>
+                <li><a href="#mjerenje">Unos mjerenja</a></li>
+                <li><a href="#historija">Historija</a></li>
+                <li><a href="#savjeti">Savjeti</a></li>
             </ul>
         </nav>
 
-        <img class="header-decoration" src="../slike/list-dekoracija.png" alt="dekoraciona slika na kraju navbara">
+        <!-- PROFIL KORISNIKA: dropdown bez JavaScripta (hover, tastatura i klik preko checkboxa) -->
+        <div class="profile-menu">
+            <input class="profile-toggle sr-only" type="checkbox" id="profile-toggle">
+            <label class="profile-trigger" for="profile-toggle">
+                <span class="profile-avatar" aria-hidden="true">K</span>
+                <span class="profile-name">Korisnik</span>
+                <span class="profile-arrow" aria-hidden="true">▾</span>
+                <span class="sr-only">– korisnički meni</span>
+            </label>
+
+            <nav class="profile-dropdown" aria-label="Korisnički meni">
+                <ul>
+                    <li><a href="#profil">Moj profil</a></li>
+                    <li><a href="#postavke">Postavke</a></li>
+                    <li><a href="#odjava">Odjava</a></li>
+                </ul>
+            </nav>
+        </div>
 
     </header>
 
-    <main class="main-content">
 
-        <section class="measurement-section" id="mjerenje">
-            
-            <header class="section-header">
-                <h2>Unos novog mjerenja</h2>
-                <p>
-                    Evidentiraj svoju potrošnju energenata i 
-                    prati svoj ekološki otisak.
-                </p>
-            </header>
+    <!-- GLAVNI RADNI PROSTOR -->
+    <main class="main-content" id="pocetna">
 
-            <form id="forma-mjerenja">
-                
-                <fieldset>
-                    <legend>Podaci o mjerenju</legend>
+        <header class="dashboard-heading">
+            <h2>Pregled potrošnje i mjerenja</h2>
+            <p>Prati emisiju CO₂, uštedu energije i status svog postrojenja.</p>
+        </header>
 
-                    <label for="energent">
-                        Odaberi energent <span aria-hidden="true">*</span>
-                    </label>
 
-                    <select id="energent" name="energent" required>
+        <!-- STATISTIČKE KARTICE (CSS grid, bez @media) -->
+        <section class="statistics-section" id="statistika" aria-label="Pregled statističkih podataka">
+
+            <article class="stat-card co2">
+                <span class="stat-icon" aria-hidden="true">☁</span>
+                <h3>Ukupna emisija CO₂</h3>
+                <p>245,8 <span>kg CO₂</span></p>
+                <small>Ukupna evidentirana emisija</small>
+            </article>
+
+            <article class="stat-card energy">
+                <span class="stat-icon" aria-hidden="true">🌿</span>
+                <h3>Ušteda energije</h3>
+                <p>18,5%</p>
+                <small>U odnosu na prethodni period</small>
+            </article>
+
+            <article class="stat-card status">
+                <span class="stat-icon" aria-hidden="true">✓</span>
+                <h3>Status postrojenja ElektroenergetskoPostrojenjeZenica2026Test</h3>
+                <p>Aktivno</p>
+                <small>Postrojenje radi u normalnom režimu</small>
+            </article>
+
+        </section>
+
+
+        <div class="dashboard-layout">
+
+            <!-- FORMA ZA UNOS MJERENJA -->
+            <section class="measurement-section" id="mjerenje" aria-labelledby="measurement-title">
+
+                <header class="section-header">
+                    <h2 id="measurement-title">Unos novog mjerenja</h2>
+                    <p>Evidentiraj svoju potrošnju energenata i prati svoj ekološki otisak.</p>
+                </header>
+
+                <form id="forma-mjerenja" action="#" method="get">
+
+                    <fieldset>
+
+                        <legend>Podaci o mjerenju</legend>
+
+                        <p class="required-note">
+                            <span aria-hidden="true">*</span> Polja označena zvjezdicom su obavezna.
+                        </p>
+
+                        <label for="energent">
+                            Odaberi energent
+                            <span class="required-mark" aria-hidden="true">*</span>
+                            <span class="sr-only">(obavezno)</span>
+                        </label>
+                        <select id="energent" name="energent" required aria-describedby="energent-hint">
                             <option value="">Odaberi energent</option>
                             <option value="struja">Struja</option>
                             <option value="plin">Plin</option>
                             <option value="voda">Voda</option>
-                    </select>
+                        </select>
+                        <small class="field-hint" id="energent-hint">Odaberite jedan od ponuđenih energenata.</small>
 
-                    <label for="kolicina">
-                        Kolicina potrošnje <span aria-hidden="true">*</span>
-                    </label>
+                        <label for="kolicina">
+                            Količina potrošnje
+                            <span class="required-mark" aria-hidden="true">*</span>
+                            <span class="sr-only">(obavezno)</span>
+                        </label>
+                        <input
+                            type="number"
+                            id="kolicina"
+                            name="kolicina"
+                            min="0.01"
+                            max="999999.99"
+                            step="0.01"
+                            inputmode="decimal"
+                            placeholder="Npr. 123.45"
+                            required
+                            aria-describedby="kolicina-hint"
+                        >
+                        <small class="field-hint" id="kolicina-hint">Pozitivan broj, najviše dvije decimale.</small>
 
-                    <input 
-                    type="number"
-                    id="kolicina"
-                    name="kolicina"
-                    min="0.01"
-                    step="0.01"
-                    placeholder="Npr. 123.45"
-                    required>
+                        <label for="datum">
+                            Datum očitanja
+                            <span class="required-mark" aria-hidden="true">*</span>
+                            <span class="sr-only">(obavezno)</span>
+                        </label>
+                        <input
+                            type="date"
+                            id="datum"
+                            name="datum"
+                            min="2026-01-01"
+                            max="2026-12-31"
+                            required
+                            aria-describedby="datum-hint"
+                        >
+                        <small class="field-hint" id="datum-hint">Dozvoljen je samo datum u 2026. godini.</small>
 
-                    <label for="datum">
-                        Datum očitanja <span aria-hidden="true">*</span>
-                    </label>
+                        <label class="incident-label" for="incident">
+                            <input type="checkbox" id="incident" name="incident">
+                            Hitna intervencija / Incident
+                        </label>
 
-                    <input 
-                    type="date"
-                    id="datum"
-                    name="datum"
-                    required>
+                        <button type="submit" class="submit-button">Sačuvaj mjerenje</button>
 
-                    <label class="incident-label" for="incident">
-                        <input 
-                        type="checkbox"
-                        id="incident"
-                        name="incident"
-                        >Hitna intervencija / Incident
-                    </label>
+                    </fieldset>
 
-                    <button type="submit" class="submit-button">
-                        Sačuvaj mjerenje
-                    </button>
-
-                </fieldset>
-
-            </form>
-
-        </section>
-
-        <aside class="eco-sidebar">
-            <section class="eco-tip">
-                <h2>Ekološki savjet</h2>
-
-                <article>
-                    <h3>Štednja električne energije</h3>
-
-                    <p>
-                       Isključuj električne uređaje kada ih ne
-                        koristiš. Na taj način smanjuješ nepotrebnu
-                        potrošnju energije. 
-                    </p>
-                </article>
+                </form>
 
             </section>
 
-            <section class="eco-information">
-                <h2>Zašto pratiti potrošnju</h2>
+
+            <!-- HISTORIJA MJERENJA -->
+            <section class="history-section" id="historija" aria-labelledby="history-title">
+
+                <header class="history-header">
+                    <h2 id="history-title">Historija mjerenja</h2>
+                    <p>Pregled prethodno evidentirane potrošnje.</p>
+                </header>
+
+                <div class="table-container" role="region" aria-label="Tabela historije mjerenja (može se pomjerati)" tabindex="0">
+
+                    <table>
+
+                        <caption>Historija potrošnje energenata i emisije CO₂</caption>
+
+                        <thead>
+                            <tr>
+                                <th scope="col">#</th>
+                                <th scope="col">Datum</th>
+                                <th scope="col">Energent</th>
+                                <th scope="col">Količina</th>
+                                <th scope="col">Emisija CO₂</th>
+                                <th scope="col">Status</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            <tr>
+                                <th scope="row">1</th>
+                                <td>03.11.2026.</td>
+                                <td>Struja</td>
+                                <td>125,50 kWh</td>
+                                <td>49,8 kg</td>
+                                <td><span class="status-badge normal">Normalno</span></td>
+                            </tr>
+                            <tr>
+                                <th scope="row">2</th>
+                                <td>01.11.2026.</td>
+                                <td>Plin</td>
+                                <td>35,00 m³</td>
+                                <td>72,1 kg</td>
+                                <td><span class="status-badge normal">Normalno</span></td>
+                            </tr>
+                            <tr>
+                                <th scope="row">3</th>
+                                <td>28.10.2026.</td>
+                                <td>Voda</td>
+                                <td>4,20 m³</td>
+                                <td>0,0 kg</td>
+                                <td><span class="status-badge incident">Incident</span></td>
+                            </tr>
+                            <tr>
+                                <th scope="row">4</th>
+                                <td>25.10.2026.</td>
+                                <td>Struja</td>
+                                <td>98,30 kWh</td>
+                                <td>39,1 kg</td>
+                                <td><span class="status-badge normal">Normalno</span></td>
+                            </tr>
+                            <tr>
+                                <th scope="row">5</th>
+                                <td>20.10.2026.</td>
+                                <td>Plin</td>
+                                <td>42,00 m³</td>
+                                <td>86,5 kg</td>
+                                <td><span class="status-badge normal">Normalno</span></td>
+                            </tr>
+                            <tr>
+                                <th scope="row">6</th>
+                                <td>15.10.2026.</td>
+                                <td>Voda</td>
+                                <td>5,10 m³</td>
+                                <td>0,0 kg</td>
+                                <td><span class="status-badge normal">Normalno</span></td>
+                            </tr>
+                            <tr>
+                                <th scope="row">7</th>
+                                <td>12.10.2026.</td>
+                                <td>Struja</td>
+                                <td>110,75 kWh</td>
+                                <td>44,0 kg</td>
+                                <td><span class="status-badge normal">Normalno</span></td>
+                            </tr>
+                            <tr>
+                                <th scope="row">8</th>
+                                <td>08.10.2026.</td>
+                                <td>Plin</td>
+                                <td>38,50 m³</td>
+                                <td>79,3 kg</td>
+                                <td><span class="status-badge normal">Normalno</span></td>
+                            </tr>
+                            <tr>
+                                <th scope="row">9</th>
+                                <td>03.10.2026.</td>
+                                <td>Struja</td>
+                                <td>142,00 kWh</td>
+                                <td>56,4 kg</td>
+                                <td><span class="status-badge incident">Incident</span></td>
+                            </tr>
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+            </section>
+
+        </div>
+
+
+        <!-- BOČNA TRAKA -->
+        <aside class="eco-sidebar" id="savjeti" aria-label="Dodatne informacije i ekološki savjeti">
+
+            <!-- Brzi pregled: počinje u ravni sa statističkim karticama -->
+            <section class="quick-overview" aria-labelledby="quick-overview-title">
+                <div class="sidebar-section-heading">
+                    <span class="sidebar-icon" aria-hidden="true">
+                        <img src="../slike/zelena-munja.png" alt="" class="overview-lightning-icon">
+                    </span>
+                    <h2 id="quick-overview-title">Brzi pregled</h2>
+                </div>
+
+                <div class="quick-overview-list">
+                    <article class="overview-item">
+                        <span class="overview-icon" aria-hidden="true">
+                            <img src="../slike/zeleni-papiri.png" alt="" class="overview-paper-icon">
+                        </span>
+                        <span class="overview-copy">
+                            <span class="overview-label">Ukupno mjerenja</span>
+                            <strong>24</strong>
+                        </span>
+                    </article>
+
+                    <article class="overview-item">
+                        <span class="overview-icon" aria-hidden="true">
+                            <svg viewBox="0 0 24 24" focusable="false">
+                                <rect x="4" y="6" width="16" height="14" rx="2" />
+                                <path d="M8 3.75v4M16 3.75v4M4 10h16M8 13.5h2M14 13.5h2M8 17h2" />
+                            </svg>
+                        </span>
+                        <span class="overview-copy">
+                            <span class="overview-label">Datum posljednjeg mjerenja</span>
+                            <strong>03.11.</strong>
+                        </span>
+                    </article>
+                </div>
+            </section>
+
+            <!-- Ekološki savjet -->
+            <section class="eco-tip" aria-labelledby="eco-tip-title">
+                <div class="sidebar-section-heading">
+                    <span class="sidebar-icon" aria-hidden="true">
+                        <img src="../slike/eko-recikliranje.png" alt="">
+                    </span>
+                    <h2 id="eco-tip-title">Eko-savjet dana</h2>
+                </div>
                 <article>
-                    <h3>bolje navike</h3>
+                    <h3>Štednja električne energije</h3>
                     <p>
-                    Redovnim praćenjem potrošnje možeš
-                    prepoznati navike koje negativno utiču
-                    na okoliš.  
+                        Isključuj električne uređaje kada ih ne koristiš.
+                        Na taj način smanjuješ nepotrebnu potrošnju energije.
                     </p>
-
                 </article>
+            </section>
 
+            <!-- Ekološki cilj -->
+            <section class="eco-goal" aria-labelledby="eco-goal-title">
+                <div class="sidebar-section-heading">
+                    <span class="sidebar-icon" aria-hidden="true">
+                        <img src="../slike/zastavica-cilj.png" alt="" class="goal-flag-icon">
+                    </span>
+                    <h2 id="eco-goal-title">Tvoj ekološki cilj</h2>
+                </div>
+                <p class="goal-description">Smanjiti emisiju CO₂ za 10% u odnosu na prethodni period.</p>
+                <div class="goal-progress" role="progressbar"
+                     aria-label="Napredak prema ekološkom cilju"
+                     aria-valuemin="0" aria-valuemax="100" aria-valuenow="65">
+                    <span></span>
+                </div>
+                <div class="goal-progress-label">
+                    <span>Ostvareni napredak</span>
+                    <strong>65%</strong>
+                </div>
             </section>
 
         </aside>
 
     </main>
+
+
+    <footer class="site-footer">
+        <p>EcoTrack · Web tehnologije 2026/27 · Spirala 1</p>
+    </footer>
+
 </body>
 </html>

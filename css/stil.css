@@ -1,0 +1,1279 @@
+/* =========================================================
+   EcoTrack – stil.css
+   Sadržaj:
+   1. Varijable (:root) i tamna tema
+   2. Osnovne postavke
+   3. Zaglavlje, navigacija i profil (dropdown)
+   4. Glavni radni prostor (raspored)
+   5. Statističke kartice
+   6. Forma
+   7. Tabela historije
+   8. Bočna traka i podnožje
+   9. Responzivni upiti (osim kartica – one nemaju @media)
+========================================================= */
+
+
+/* =========================================================
+   1. VARIJABLE
+   Sve vrijednosti (boje, razmaci, tipografija, ivice) žive
+   ovdje. Tamna tema mijenja SAMO varijable.
+========================================================= */
+
+:root {
+    color-scheme: light;
+
+    /* --- Paleta: brend --- */
+    --color-primary: #23834C;
+    --color-primary-dark: #176B39;
+    --color-primary-deep: #064E3B;
+    --color-on-brand: #FFFFFF;
+    --color-on-brand-soft: #E8F6EE;
+
+    /* --- Paleta: površine i tekst --- */
+    --color-page: #F5F8F5;
+    --color-surface: #FFFFFF;
+    --color-surface-soft: #E8F3E9;
+    --color-surface-alt: #F1F6F2;
+    --color-text: #183D2B;
+    --color-text-secondary: #4A5F52;
+
+    /* --- Paleta: ivice, polja, stanja --- */
+    --color-border: #CFD8D3;
+    --color-table-border: #E5ECE7;
+    --color-input-bg: #FAFCFA;
+    --color-input-border: #6F8277;
+    --color-danger: #B42318;
+    --color-valid: #23834C;
+    --color-focus: #176B39;
+    --color-row-hover: #E2F0E5;
+
+    /* --- Zaglavlje --- */
+    --header-start: #003D25;
+    --header-mid: #08702F;
+    --header-end: #1F6B2E;
+    --header-decoration: url("../slike/list-dekoracija.png");
+    --decoration-opacity: 0.22;
+    --overlay-soft: rgba(255, 255, 255, 0.14);
+    --overlay-hover: rgba(255, 255, 255, 0.16);
+    --overlay-border: rgba(255, 255, 255, 0.5);
+
+    /* --- Kartice --- */
+    --card-co2-start: #064E3B;
+    --card-co2-end: #0A6A46;
+    --card-energy-start: #14532D;
+    --card-energy-end: #1E7A44;
+    --card-status-start: #166534;
+    --card-status-end: #25794A;
+    --card-icon-bg: rgba(255, 255, 255, 0.16);
+
+    /* --- Bočna traka --- */
+    --color-tip-bg: #E8F3E9;
+    --color-tip-border: #23834C;
+    --color-info-bg: #F0F5EC;
+    --color-info-border: #83B95A;
+
+    /* --- Statusne oznake --- */
+    --badge-normal-bg: #DCFCE7;
+    --badge-normal-text: #166534;
+    --badge-incident-bg: #FEE2E2;
+    --badge-incident-text: #B91C1C;
+
+    /* --- Sjene --- */
+    --shadow-card: 0 5px 20px rgba(0, 45, 25, 0.07);
+    --shadow-navbar: 0 12px 28px rgba(0, 45, 25, 0.18);
+    --shadow-card-hover: 0 13px 28px rgba(0, 45, 25, 0.22);
+    --shadow-dropdown: 0 12px 28px rgba(0, 0, 0, 0.2);
+
+    /* --- Razmaci --- */
+    --space-2xs: 0.25rem;
+    --space-xs: 0.5rem;
+    --space-sm: 0.75rem;
+    --space-md: 1.125rem;
+    --space-lg: 1.5rem;
+    --space-xl: 2rem;
+    --space-2xl: 2.75rem;
+    --gutter: clamp(0.75rem, 3vw, 1.5rem);
+
+    /* --- Dimenzije --- */
+    --content-max: 87rem;
+    --sidebar-width: 18rem;
+    --table-min-width: 44rem;
+    --table-max-height: 22rem;
+    --card-min-height: 11.875rem;
+    --card-min-width: 15.5rem;
+
+    /* --- Tipografija --- */
+    --font-family-base: Arial, Helvetica, sans-serif;
+    --font-size-xs: 0.75rem;
+    --font-size-small: 0.875rem;
+    --font-size-base: 1rem;
+    --font-size-md: 1.125rem;
+    --font-size-lg: 1.25rem;
+    --font-size-xl: 1.875rem;
+    --font-size-heading: 2rem;
+    --font-size-logo: clamp(1.75rem, 5vw, 2.625rem);
+    --line-height-base: 1.5;
+
+    /* --- Ivice i zaobljenja --- */
+    --border-width: 1px;
+    --border-width-strong: 2px;
+    --border-width-accent: 5px;
+    --radius-small: 9px;
+    --radius-medium: 14px;
+    --radius-large: 12px;
+    --radius-pill: 999px;
+
+    /* --- Animacije --- */
+    --transition-fast: 0.2s ease;
+    --transition-card: 0.25s ease;
+}
+
+@media (prefers-color-scheme: dark) {
+    :root {
+        color-scheme: dark;
+
+        --color-page: #101914;
+        --color-surface: #1B2921;
+        --color-surface-soft: #24372B;
+        --color-surface-alt: #26382D;
+        --color-text: #E5F0E8;
+        --color-text-secondary: #B4C5B8;
+
+        --color-border: #52675A;
+        --color-table-border: #3B5042;
+        --color-input-bg: #17231B;
+        --color-input-border: #8DA395;
+        --color-danger: #FF8A94;
+        --color-valid: #75C995;
+        --color-focus: #75C995;
+        --color-row-hover: #314A39;
+
+        --color-primary-deep: #075B43;
+
+        --color-tip-bg: #24372B;
+        --color-tip-border: #48A66B;
+        --color-info-bg: #1D3026;
+        --color-info-border: #8BC85F;
+
+        --badge-normal-bg: #1F4D32;
+        --badge-normal-text: #C6F6D5;
+        --badge-incident-bg: #5B1A1F;
+        --badge-incident-text: #FECACA;
+
+        --shadow-card: 0 5px 20px rgba(0, 0, 0, 0.25);
+        --shadow-navbar: 0 12px 28px rgba(0, 0, 0, 0.35);
+        --shadow-card-hover: 0 13px 28px rgba(0, 0, 0, 0.45);
+        --shadow-dropdown: 0 12px 28px rgba(0, 0, 0, 0.5);
+    }
+}
+
+/* Korisnici koji ne žele animacije */
+@media (prefers-reduced-motion: reduce) {
+    :root {
+        --transition-fast: 0s;
+        --transition-card: 0s;
+    }
+
+    html {
+        scroll-behavior: auto;
+    }
+}
+
+
+/* =========================================================
+   2. OSNOVNE POSTAVKE
+========================================================= */
+
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    margin: 0;
+
+    background-color: var(--color-page);
+    color: var(--color-text);
+
+    font-family: var(--font-family-base);
+    font-size: var(--font-size-base);
+    line-height: var(--line-height-base);
+
+    /* Dugačke riječi se lome umjesto da probiju kontejner */
+    overflow-wrap: anywhere;
+}
+
+:focus-visible {
+    outline: var(--border-width-strong) solid var(--color-focus);
+    outline-offset: var(--space-2xs);
+}
+
+/* Samo za čitače ekrana */
+.sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    margin: -1px;
+    padding: 0;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+    border: 0;
+}
+
+
+/* =========================================================
+   3. ZAGLAVLJE, NAVIGACIJA I PROFIL
+   Stacking: header je zaseban stacking context (isolation)
+   sa z-index: 1. Kartice ispod ne postavljaju z-index, pa
+   i kad im transform napravi vlastiti stacking context,
+   ostaju ispod zaglavlja, a time i ispod dropdowna.
+========================================================= */
+
+.site-header {
+    position: relative;
+    z-index: 1;
+    isolation: isolate;
+
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--space-md) var(--space-xl);
+
+    width: min(calc(100% - 2 * var(--gutter)), var(--content-max));
+    min-height: 7rem;
+    margin: var(--gutter) auto 0;
+    padding: var(--space-md) var(--space-xl);
+
+    border-radius: var(--radius-large);
+    background: linear-gradient(
+        105deg,
+        var(--header-start) 0%,
+        var(--header-mid) 52%,
+        var(--header-end) 100%
+    );
+    box-shadow: var(--shadow-navbar);
+}
+
+/* Dekorativni list: pseudo-element se sam odsijeca na rubove
+   zaglavlja, pa ne pravi horizontalni scroll i ne ide preko sadržaja */
+.site-header::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+
+    border-radius: inherit;
+    background: var(--header-decoration) no-repeat right -2rem bottom -7rem / 14rem auto;
+    opacity: var(--decoration-opacity);
+    pointer-events: none;
+}
+
+.logo,
+.main-nav,
+.profile-menu {
+    position: relative;
+    z-index: 1;
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+}
+
+.logo img {
+    display: block;
+    width: 4.5rem;
+    height: auto;
+    object-fit: contain;
+}
+
+.logo h1 {
+    margin: 0;
+    color: var(--color-on-brand);
+    font-size: var(--font-size-logo);
+    letter-spacing: -0.03em;
+}
+
+/* Navigacija */
+
+.main-nav ul {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--space-xs);
+
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.main-nav a {
+    display: block;
+    padding: var(--space-sm) var(--space-md);
+
+    border-radius: var(--radius-pill);
+    color: var(--color-on-brand);
+    font-size: var(--font-size-md);
+    font-weight: 600;
+    text-decoration: none;
+    white-space: nowrap;
+
+    transition: background-color var(--transition-fast);
+}
+
+.main-nav a:hover,
+.main-nav a[aria-current="page"] {
+    background-color: var(--overlay-hover);
+}
+
+.site-header :focus-visible {
+    outline-color: var(--color-on-brand);
+}
+
+/* Profil korisnika + dropdown */
+
+.profile-menu {
+    margin-left: auto;
+}
+
+.profile-trigger {
+    display: flex;
+    align-items: center;
+    gap: var(--space-xs);
+    padding: var(--space-xs) var(--space-sm);
+
+    border: var(--border-width) solid var(--overlay-border);
+    border-radius: var(--radius-pill);
+    background-color: var(--overlay-soft);
+    color: var(--color-on-brand);
+    font-weight: 600;
+    cursor: pointer;
+
+    transition: background-color var(--transition-fast);
+}
+
+.profile-menu:hover .profile-trigger,
+.profile-toggle:checked + .profile-trigger {
+    background-color: var(--overlay-hover);
+}
+
+.profile-toggle:focus-visible + .profile-trigger {
+    outline: var(--border-width-strong) solid var(--color-on-brand);
+    outline-offset: var(--space-2xs);
+}
+
+.profile-avatar {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.125rem;
+    height: 2.125rem;
+
+    border-radius: 50%;
+    background-color: var(--color-on-brand);
+    color: var(--color-primary-deep);
+    font-weight: 700;
+}
+
+.profile-arrow {
+    font-size: var(--font-size-small);
+}
+
+.profile-dropdown {
+    position: absolute;
+    top: calc(100% + var(--space-xs));
+    right: 0;
+
+    display: none;
+    min-width: 11rem;
+    padding: var(--space-xs);
+
+    border: var(--border-width) solid var(--color-border);
+    border-radius: var(--radius-medium);
+    background-color: var(--color-surface);
+    box-shadow: var(--shadow-dropdown);
+}
+
+/* "Most" preko razmaka između dugmeta i menija:
+   bez njega bi se meni zatvorio dok miš prelazi razmak */
+.profile-dropdown::before {
+    content: "";
+    position: absolute;
+    inset: auto 0 100% 0;
+    height: var(--space-xs);
+}
+
+.profile-menu:hover .profile-dropdown,
+.profile-toggle:checked ~ .profile-dropdown,
+.profile-menu:has(:focus-visible) .profile-dropdown {
+    display: block;
+}
+
+.profile-dropdown ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.profile-dropdown a {
+    display: block;
+    padding: var(--space-sm);
+
+    border-radius: var(--radius-small);
+    color: var(--color-text);
+    text-decoration: none;
+    white-space: nowrap;
+}
+
+.profile-dropdown a:hover,
+.profile-dropdown a:focus-visible {
+    background-color: var(--color-surface-soft);
+}
+
+.profile-dropdown :focus-visible {
+    outline-color: var(--color-focus);
+}
+
+
+/* =========================================================
+   4. GLAVNI RADNI PROSTOR
+========================================================= */
+
+.main-content {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--space-lg);
+
+    width: min(calc(100% - 2 * var(--gutter)), var(--content-max));
+    margin: var(--space-2xl) auto;
+}
+
+.dashboard-heading h2 {
+    margin: 0 0 var(--space-xs);
+    font-size: var(--font-size-heading);
+}
+
+.dashboard-heading p {
+    margin: 0;
+    color: var(--color-text-secondary);
+}
+
+.dashboard-layout {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--space-lg);
+    align-items: stretch;
+}
+
+
+/* =========================================================
+   5. STATISTIČKE KARTICE
+   Prelazak 3 kolone -> 1 kolona radi BEZ @media upita:
+   auto-fit + minmax(min(100%, X), 1fr).
+========================================================= */
+
+.statistics-section {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, var(--card-min-width)), 1fr));
+    gap: var(--space-lg);
+}
+
+.stat-card {
+    min-width: 0;
+    min-height: var(--card-min-height);
+    padding: var(--space-lg);
+
+    overflow: hidden;
+    overflow-wrap: anywhere;
+
+    border-radius: var(--radius-large);
+    color: var(--color-on-brand);
+    box-shadow: var(--shadow-card);
+
+    transition:
+        transform var(--transition-card),
+        box-shadow var(--transition-card);
+}
+
+.stat-card.co2 {
+    background: linear-gradient(135deg, var(--card-co2-start), var(--card-co2-end));
+}
+
+.stat-card.energy {
+    background: linear-gradient(135deg, var(--card-energy-start), var(--card-energy-end));
+}
+
+.stat-card.status {
+    background: linear-gradient(135deg, var(--card-status-start), var(--card-status-end));
+}
+
+.stat-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.625rem;
+    height: 2.625rem;
+    margin-bottom: var(--space-md);
+
+    border-radius: var(--radius-small);
+    background-color: var(--card-icon-bg);
+    font-size: var(--font-size-lg);
+}
+
+.stat-card h3 {
+    margin: 0 0 var(--space-sm);
+    color: var(--color-on-brand-soft);
+    font-size: var(--font-size-base);
+    font-weight: 500;
+}
+
+.stat-card p {
+    margin: 0 0 var(--space-xs);
+    color: var(--color-on-brand);
+    font-size: var(--font-size-xl);
+    font-weight: 700;
+}
+
+.stat-card p span {
+    font-size: var(--font-size-small);
+    font-weight: 400;
+}
+
+.stat-card small {
+    display: block;
+    color: var(--color-on-brand-soft);
+    font-size: var(--font-size-small);
+}
+
+/* Hover efekat: transform (pravi stacking context, zato je
+   zaglavlje namjerno iznad kartica) */
+.stat-card:hover {
+    transform: translateY(-0.3rem) scale(1.02);
+    box-shadow: var(--shadow-card-hover);
+}
+
+
+/* =========================================================
+   6. FORMA
+========================================================= */
+
+.measurement-section,
+.history-section {
+    min-width: 0;
+    padding: var(--space-xl);
+
+    border-radius: var(--radius-large);
+    background-color: var(--color-surface);
+    box-shadow: var(--shadow-card);
+}
+
+.section-header,
+.history-header {
+    margin-bottom: var(--space-lg);
+}
+
+.section-header h2,
+.history-header h2 {
+    margin: 0 0 var(--space-xs);
+    font-size: var(--font-size-lg);
+    font-weight: 700;
+}
+
+.section-header p,
+.history-header p {
+    margin: 0;
+    color: var(--color-text-secondary);
+}
+
+.measurement-section fieldset {
+    min-width: 0;
+    margin: 0;
+    padding: 0;
+    border: 0;
+}
+
+.measurement-section legend {
+    margin-bottom: var(--space-sm);
+    padding: 0;
+    font-size: var(--font-size-lg);
+    font-weight: 700;
+}
+
+.required-note {
+    margin: 0 0 var(--space-md);
+    color: var(--color-text-secondary);
+    font-size: var(--font-size-small);
+}
+
+.measurement-section label {
+    display: block;
+    margin-bottom: var(--space-xs);
+    font-size: var(--font-size-small);
+    font-weight: 600;
+}
+
+.required-mark {
+    color: var(--color-danger);
+}
+
+.measurement-section input:not([type="checkbox"]),
+.measurement-section select {
+    display: block;
+    width: 100%;
+    height: 3rem;
+    margin-bottom: var(--space-2xs);
+    padding: 0 var(--space-sm);
+
+    border: var(--border-width) solid var(--color-input-border);
+    border-radius: var(--radius-small);
+    background-color: var(--color-input-bg);
+    color: var(--color-text);
+    font: inherit;
+
+    transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
+}
+
+.field-hint {
+    display: block;
+    margin-bottom: var(--space-md);
+    color: var(--color-text-secondary);
+    font-size: var(--font-size-xs);
+}
+
+/* Validacija se prikazuje tek NAKON interakcije korisnika.
+   Stanje se ne prenosi samo bojom: pojavljuje se i ikona + podebljan tekst. */
+.measurement-section input:user-invalid,
+.measurement-section select:user-invalid {
+    border-color: var(--color-danger);
+    box-shadow: 0 0 0 var(--border-width) var(--color-danger);
+}
+
+.measurement-section input:user-invalid + .field-hint,
+.measurement-section select:user-invalid + .field-hint {
+    color: var(--color-danger);
+    font-weight: 700;
+}
+
+.measurement-section input:user-invalid + .field-hint::before,
+.measurement-section select:user-invalid + .field-hint::before {
+    content: "⚠ ";
+}
+
+.measurement-section input:user-valid:not([type="checkbox"]),
+.measurement-section select:user-valid {
+    border-color: var(--color-valid);
+    box-shadow: 0 0 0 var(--border-width) var(--color-valid);
+}
+
+.measurement-section .incident-label {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+    margin: var(--space-xs) 0 var(--space-lg);
+
+    font-weight: 400;
+    cursor: pointer;
+}
+
+.incident-label input {
+    flex-shrink: 0;
+    width: 1.125rem;
+    height: 1.125rem;
+    accent-color: var(--color-primary);
+    cursor: pointer;
+}
+
+.submit-button {
+    width: 100%;
+    padding: var(--space-md);
+
+    border: 0;
+    border-radius: var(--radius-small);
+    background-color: var(--color-primary);
+    color: var(--color-on-brand);
+    font: inherit;
+    font-weight: 700;
+    cursor: pointer;
+
+    transition: background-color var(--transition-fast);
+}
+
+.submit-button:hover {
+    background-color: var(--color-primary-dark);
+}
+
+
+/* =========================================================
+   7. TABELA HISTORIJE
+   - .table-container je scroll kontejner (horizontalni i vertikalni)
+   - max-height je uvijek postavljen, pa je thead stvarno "zaleđen"
+========================================================= */
+
+.history-section {
+    display: flex;
+    flex-direction: column;
+}
+
+.table-container {
+    flex: 0 1 auto;
+    min-height: 0;
+    max-height: var(--table-max-height);
+    overflow: auto;
+
+    border: var(--border-width) solid var(--color-table-border);
+    border-radius: var(--radius-medium);
+}
+
+.table-container table {
+    width: 100%;
+    min-width: var(--table-min-width);
+    border-collapse: separate;
+    border-spacing: 0;
+    text-align: left;
+}
+
+.table-container caption {
+    padding: var(--space-sm);
+    color: var(--color-text-secondary);
+    font-size: var(--font-size-small);
+    text-align: left;
+}
+
+.table-container thead th {
+    position: sticky;
+    top: 0;
+    z-index: 1;
+
+    padding: var(--space-md) var(--space-sm);
+    background-color: var(--color-primary-deep);
+    color: var(--color-on-brand);
+    font-size: var(--font-size-small);
+    white-space: nowrap;
+}
+
+.table-container tbody th,
+.table-container tbody td {
+    padding: var(--space-sm);
+    border-bottom: var(--border-width) solid var(--color-table-border);
+    font-size: var(--font-size-small);
+    white-space: nowrap;
+}
+
+.table-container tbody tr:nth-child(odd) {
+    background-color: var(--color-surface);
+}
+
+.table-container tbody tr:nth-child(even) {
+    background-color: var(--color-surface-alt);
+}
+
+.table-container tbody tr:hover {
+    background-color: var(--color-row-hover);
+}
+
+.status-badge {
+    display: inline-block;
+    padding: var(--space-2xs) var(--space-sm);
+
+    border-radius: var(--radius-pill);
+    font-size: var(--font-size-xs);
+    font-weight: 700;
+}
+
+.status-badge.normal {
+    background-color: var(--badge-normal-bg);
+    color: var(--badge-normal-text);
+}
+
+.status-badge.incident {
+    background-color: var(--badge-incident-bg);
+    color: var(--badge-incident-text);
+}
+
+
+/* =========================================================
+   8. BOČNA TRAKA I PODNOŽJE
+========================================================= */
+
+.eco-sidebar {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--space-md);
+    align-content: start;
+    min-width: 0;
+}
+
+.eco-sidebar section {
+    min-width: 0;
+    padding: var(--space-lg);
+    border: var(--border-width) solid var(--color-border);
+    border-left: var(--border-width-accent) solid var(--color-tip-border);
+    border-radius: var(--radius-medium);
+    background-color: var(--color-tip-bg);
+    box-shadow: var(--shadow-card);
+}
+
+.eco-sidebar .eco-information,
+.eco-sidebar .eco-goal {
+    border-left-color: var(--color-info-border);
+    background-color: var(--color-info-bg);
+}
+
+.sidebar-section-heading {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+    margin-bottom: var(--space-md);
+}
+
+.sidebar-section-heading h2 {
+    margin: 0;
+    font-size: var(--font-size-lg);
+}
+
+.sidebar-icon {
+    display: inline-flex;
+    flex: 0 0 2.25rem;
+    align-items: center;
+    justify-content: center;
+    width: 2.25rem;
+    height: 2.25rem;
+    border-radius: var(--radius-small);
+    background-color: var(--card-icon-bg);
+    color: var(--color-primary);
+    font-size: var(--font-size-lg);
+    font-weight: 700;
+}
+
+.eco-sidebar h3 {
+    margin: 0 0 var(--space-xs);
+    font-size: var(--font-size-base);
+}
+
+.eco-sidebar p {
+    margin: 0;
+    color: var(--color-text-secondary);
+    font-size: var(--font-size-small);
+    line-height: 1.7;
+}
+
+.quick-overview-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--space-sm);
+}
+
+.overview-item {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-xs);
+    min-width: 0;
+    padding: var(--space-sm);
+    border: var(--border-width) solid var(--color-border);
+    border-radius: var(--radius-small);
+    background-color: var(--color-surface);
+}
+
+.overview-label {
+    color: var(--color-text-secondary);
+    font-size: var(--font-size-xs);
+    line-height: 1.4;
+}
+
+.overview-item strong {
+    color: var(--color-text);
+    font-size: var(--font-size-xl);
+}
+
+.goal-description {
+    margin-bottom: var(--space-md) !important;
+}
+
+.goal-progress {
+    height: 0.65rem;
+    margin-top: var(--space-md);
+    overflow: hidden;
+    border-radius: var(--radius-pill);
+    background-color: var(--color-border);
+}
+
+.goal-progress span {
+    display: block;
+    width: 65%;
+    height: 100%;
+    border-radius: inherit;
+    background: linear-gradient(90deg, var(--color-primary), #83C95B);
+}
+
+.goal-progress-label {
+    display: flex;
+    justify-content: space-between;
+    gap: var(--space-sm);
+    margin-top: var(--space-xs);
+    color: var(--color-text-secondary);
+    font-size: var(--font-size-xs);
+}
+
+.goal-progress-label strong {
+    color: var(--color-text);
+}
+
+.eco-sidebar section {
+    padding: var(--space-lg);
+    border-radius: var(--radius-medium);
+    border-left: var(--border-width-accent) solid var(--color-tip-border);
+    background-color: var(--color-tip-bg);
+}
+
+.eco-sidebar .eco-information {
+    border-left-color: var(--color-info-border);
+    background-color: var(--color-info-bg);
+}
+
+.eco-sidebar h2 {
+    margin: 0 0 var(--space-md);
+    font-size: var(--font-size-lg);
+}
+
+.eco-sidebar h3 {
+    margin: 0 0 var(--space-xs);
+    font-size: var(--font-size-base);
+}
+
+.eco-sidebar p {
+    margin: 0;
+    color: var(--color-text-secondary);
+    font-size: var(--font-size-small);
+    line-height: 1.7;
+}
+
+.site-footer {
+    width: min(calc(100% - 2 * var(--gutter)), var(--content-max));
+    margin: 0 auto var(--space-lg);
+    color: var(--color-text-secondary);
+    font-size: var(--font-size-small);
+    text-align: center;
+}
+
+.site-footer p {
+    margin: 0;
+}
+
+
+/* =========================================================
+   9. RESPONZIVNI UPITI
+   (statističke kartice namjerno NEMAJU @media – vidi sekciju 5)
+========================================================= */
+
+/* Forma i historija jedna pored druge */
+@media (min-width: 56rem) {
+    .dashboard-layout {
+        grid-template-columns: minmax(18rem, 0.85fr) minmax(0, 1.5fr);
+    }
+}
+
+/* Na širokim ekranima bočna traka postaje prava kolona sa strane */
+@media (min-width: 90rem) {
+    .main-content {
+        grid-template-columns: minmax(0, 1fr) var(--sidebar-width);
+        column-gap: var(--space-lg);
+    }
+
+    .main-content > :not(.eco-sidebar) {
+        grid-column: 1;
+    }
+
+    .main-content > .eco-sidebar {
+        grid-column: 2;
+        grid-row: 2 / span 2;
+        align-self: start;
+    }
+}
+
+
+/* Sidebar: uži prikaz zadržava vertikalne, čitljive kartice */
+@media (max-width: 89.999rem) {
+    .eco-sidebar {
+        grid-template-columns: repeat(auto-fit, minmax(min(100%, 17rem), 1fr));
+    }
+}
+
+@media (max-width: 36rem) {
+    .quick-overview-grid {
+        grid-template-columns: 1fr 1fr;
+    }
+}
+
+
+/* Brzi pregled – dva horizontalna reda sa ikonama */
+.quick-overview-list {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--space-sm);
+}
+
+.quick-overview .overview-item {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: var(--space-md);
+    padding: var(--space-md);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-small);
+    background-color: var(--color-surface-soft);
+}
+
+.overview-icon {
+    display: inline-flex;
+    flex: 0 0 2.75rem;
+    align-items: center;
+    justify-content: center;
+    width: 2.75rem;
+    height: 2.75rem;
+    border-radius: var(--radius-small);
+    background-color: var(--card-icon-bg);
+    color: var(--color-primary);
+}
+
+.overview-icon svg,
+.sidebar-icon svg {
+    width: 1.35rem;
+    height: 1.35rem;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.8;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+.overview-copy {
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+    min-width: 0;
+}
+
+.quick-overview .overview-label {
+    font-size: var(--font-size-small);
+    line-height: 1.35;
+}
+
+.quick-overview .overview-item strong {
+    font-size: var(--font-size-xl);
+    line-height: 1.2;
+}
+
+@media (max-width: 36rem) {
+    .quick-overview .overview-item {
+        padding: var(--space-sm);
+    }
+}
+
+
+/* =========================================================
+   Brzi pregled – kompaktniji horizontalni raspored
+   ========================================================= */
+
+.quick-overview {
+    padding: var(--space-lg);
+}
+
+.quick-overview .sidebar-section-heading {
+    gap: 0.8rem;
+    margin-bottom: 1rem;
+}
+
+.quick-overview .sidebar-section-heading h2 {
+    font-size: 1.25rem;
+    line-height: 1.2;
+}
+
+.quick-overview .sidebar-icon {
+    flex-basis: 2.5rem;
+    width: 2.5rem;
+    height: 2.5rem;
+    color: #42D96B;
+    background-color: rgba(66, 217, 107, 0.13);
+}
+
+.quick-overview .sidebar-icon svg {
+    width: 1.55rem;
+    height: 1.55rem;
+}
+
+.quick-overview-list {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 0.7rem;
+}
+
+.quick-overview .overview-item {
+    display: grid;
+    grid-template-columns: 2.5rem minmax(0, 1fr);
+    align-items: center;
+    column-gap: 0.8rem;
+    min-width: 0;
+    min-height: 4.25rem;
+    padding: 0.75rem 0.85rem;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-medium);
+    background-color: color-mix(in srgb, var(--color-surface) 72%, var(--color-primary) 28%);
+}
+
+.quick-overview .overview-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.5rem;
+    height: 2.5rem;
+    color: #42D96B;
+    background: transparent;
+}
+
+.quick-overview .overview-icon svg {
+    width: 2rem;
+    height: 2rem;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.8;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+.quick-overview .overview-copy {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: center;
+    column-gap: 0.45rem;
+    min-width: 0;
+}
+
+.quick-overview .overview-label {
+    min-width: 0;
+    color: var(--color-text-secondary);
+    font-size: 0.82rem;
+    line-height: 1.3;
+    overflow-wrap: normal;
+}
+
+.quick-overview .overview-item strong {
+    color: var(--color-text);
+    font-size: 1.35rem;
+    line-height: 1.1;
+    white-space: nowrap;
+}
+
+@media (max-width: 25rem) {
+    .quick-overview {
+        padding: 1rem;
+    }
+
+    .quick-overview .overview-item {
+        grid-template-columns: 2.1rem minmax(0, 1fr);
+        column-gap: 0.55rem;
+        padding: 0.65rem;
+    }
+
+    .quick-overview .overview-icon {
+        width: 2.1rem;
+        height: 2.1rem;
+    }
+
+    .quick-overview .overview-icon svg {
+        width: 1.7rem;
+        height: 1.7rem;
+    }
+
+    .quick-overview .overview-label {
+        font-size: 0.75rem;
+    }
+
+    .quick-overview .overview-item strong {
+        font-size: 1.15rem;
+    }
+}
+
+
+/* Jasne zelene SVG ikone za eko-savjet i ekološki cilj */
+.eco-tip .sidebar-icon svg,
+.eco-goal .sidebar-icon svg {
+    width: 1.45rem;
+    height: 1.45rem;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.9;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+/* Poravnanje naslova sidebara po vertikalnoj sredini ikone */
+.eco-sidebar .sidebar-section-heading {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+    gap: var(--space-sm);
+}
+
+.eco-sidebar .sidebar-section-heading .sidebar-icon {
+    align-self: center;
+    flex: 0 0 2.5rem;
+}
+
+.eco-sidebar .sidebar-section-heading h2 {
+    display: flex;
+    align-items: center;
+    align-self: center;
+    min-height: 2.5rem;
+    margin: 0;
+    line-height: 1.2;
+}
+
+
+/* Ikona recikliranja kao PNG (zamjena za SVG) */
+.eco-tip .sidebar-icon img {
+    display: block;
+    width: 1.45rem;
+    height: 1.45rem;
+    object-fit: contain;
+}
+
+
+/* PNG zelena munja u sekciji Brzi pregled */
+.quick-overview .overview-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.quick-overview .overview-lightning-icon {
+    display: block;
+    width: 1.45rem;
+    height: 1.45rem;
+    object-fit: contain;
+}
+
+
+/* PNG ikona naslaganih papira uz Ukupno mjerenja */
+.quick-overview .overview-paper-icon {
+    display: block;
+    width: 1.45rem;
+    height: 1.45rem;
+    object-fit: contain;
+}
+
+
+/* PNG zastavica u kartici Tvoj ekološki cilj */
+.eco-goal .goal-flag-icon {
+    display: block;
+    width: 1.45rem;
+    height: 1.45rem;
+    object-fit: contain;
+}
