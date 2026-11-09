@@ -820,7 +820,6 @@ body {
     box-shadow: var(--shadow-card);
 }
 
-.eco-sidebar .eco-information,
 .eco-sidebar .eco-goal {
     border-left-color: var(--color-info-border);
     background-color: var(--color-info-bg);
@@ -852,23 +851,8 @@ body {
     font-weight: 700;
 }
 
-.eco-sidebar h3 {
-    margin: 0 0 var(--space-xs);
-    font-size: var(--font-size-base);
-}
 
-.eco-sidebar p {
-    margin: 0;
-    color: var(--color-text-secondary);
-    font-size: var(--font-size-small);
-    line-height: 1.7;
-}
 
-.quick-overview-grid {
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: var(--space-sm);
-}
 
 .overview-item {
     display: flex;
@@ -892,8 +876,8 @@ body {
     font-size: var(--font-size-xl);
 }
 
-.goal-description {
-    margin-bottom: var(--space-md) !important;
+.eco-goal .goal-description {
+    margin-bottom: var(--space-md);
 }
 
 .goal-progress {
@@ -925,17 +909,6 @@ body {
     color: var(--color-text);
 }
 
-.eco-sidebar section {
-    padding: var(--space-lg);
-    border-radius: var(--radius-medium);
-    border-left: var(--border-width-accent) solid var(--color-tip-border);
-    background-color: var(--color-tip-bg);
-}
-
-.eco-sidebar .eco-information {
-    border-left-color: var(--color-info-border);
-    background-color: var(--color-info-bg);
-}
 
 .eco-sidebar h2 {
     margin: 0 0 var(--space-md);
@@ -1005,11 +978,6 @@ body {
     }
 }
 
-@media (max-width: 36rem) {
-    .quick-overview-grid {
-        grid-template-columns: 1fr 1fr;
-    }
-}
 
 
 /* Brzi pregled – dva horizontalna reda sa ikonama */

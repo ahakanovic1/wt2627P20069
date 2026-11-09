@@ -2,56 +2,51 @@
 
 ## 1. Flexbox ili Grid
 
-U projektu EcoTrack koristim oba CSS alata, ali za različite namjene.
+U projektu EcoTrack koristim CSS Grid i Flexbox za različite vrste rasporeda.
 
-- **CSS Grid** koristim u `.statistics-section` jer raspoređujem tri statističke kartice u kolone. Grid omogućava da kartice imaju uredan raspored, jednake širine i da se broj kolona promijeni pomoću media query pravila.
-- **CSS Grid** koristim i u `.dashboard-layout` jer raspoređujem dvije glavne cjeline: `.measurement-section` i `.history-section`. Na širokom ekranu prikazuju se jedna pored druge, a ispod 900 px prelaze u jednu kolonu.
-- **Flexbox** koristim u `.site-header`, `.logo`, `.main-nav ul`, `.eco-sidebar` i `.history-section`. Flexbox je pogodan za raspoređivanje elemenata u jednom pravcu, poravnanje sadržaja i kontrolu razmaka.
-- U `.history-section` koristim `flex-direction: column` kako bi naslov i opis ostali iznad tabele, dok `.table-container` sa `flex: 1` zauzima preostali prostor i omogućava skrolanje.
+- **CSS Grid** koristim u `.statistics-section` za raspored tri statističke kartice. `repeat(auto-fit, minmax(...))` omogućava da se broj kolona automatski prilagodi raspoloživoj širini, bez media queryja za ovaj raspored.
+- **CSS Grid** koristim u `.dashboard-layout` za raspored forme i historije mjerenja. Na širim ekranima sekcije su jedna pored druge, a na užim prelaze u jednu kolonu.
+- **CSS Grid** koristim u `.main-content` i `.eco-sidebar` za raspored glavnog sadržaja i bočne trake.
+- **Flexbox** koristim u `.site-header`, `.logo`, `.main-nav ul`, `.profile-trigger` i `.history-section`. Pogodan je za poravnanje elemenata u jednom pravcu. U `.history-section` naslov ostaje iznad tabele, a tabela se nalazi u prostoru ispod njega.
 
-Grid je izabran za dvodimenzionalni raspored kartica, a Flexbox za poravnanje elemenata unutar pojedinačnih sekcija.
+Grid je izabran za rasporede u redovima i kolonama, dok Flexbox koristim za poravnanje elemenata unutar pojedinačnih komponenti.
 
-## 2. CSS specifičnost i izuzetak `!important`
+## 2. CSS specifičnost i `!important`
 
-U CSS-u postoji jedan namjerni izuzetak sa `!important`:
+U završnoj verziji projekta ne koristim `!important`.
 
-```css
-.eco-information {
-    background-color: #F0F5EC !important;
-    border-left: 5px solid #83B95A;
-}
-```
+Kada je potrebno posebno stilizovati opis ekološkog cilja, koristim selektor `.eco-goal .goal-description`. On je dovoljno specifičan da nadjača opštije pravilo `.eco-sidebar p`, bez potrebe za `!important`.
 
-Opšte pravilo `.eco-sidebar section` postavlja pozadinu svim sekcijama bočne trake. Pravilo `.eco-information` treba da ima posebnu boju pozadine, različitu od `.eco-tip` sekcije.
-
-Deklaracija `!important` osigurava da se posebna boja `.eco-information` primijeni i kada se pravila za pozadinu sukobe. U ovom projektu je to izdvojen i dokumentovan izuzetak; `!important` se ne koristi kao uobičajen način stilizovanja.
+Specifičnost se rješava odgovarajućim selektorima i logičnim redoslijedom CSS pravila.
 
 ## 3. Simulacija box modela
 
 Na početku CSS-a definisano je:
 
 ```css
-* {
+*,
+*::before,
+*::after {
     box-sizing: border-box;
 }
 ```
 
-To znači da se zadana širina i visina elementa računaju zajedno sa paddingom i borderom.
+To znači da zadana širina i visina elementa uključuju padding i border.
 
 Kada bi se uklonio `box-sizing: border-box`, podrazumijevana vrijednost bila bi `content-box`. Tada bi se padding i border dodavali na zadanu širinu elementa.
 
-Na primjer, element širine `100%` sa lijevim i desnim paddingom od 30 px bio bi širi od raspoloživog prostora za ukupno 60 px, uz dodatak bordera. To bi moglo izazvati prelijevanje sadržaja, horizontalno skrolanje i poremetiti raspored kartica u Grid kontejneru.
+Na primjer, element širine `100%` sa lijevim i desnim paddingom od 30 px bio bi širi od raspoloživog prostora za ukupno 60 px, uz dodatak bordera. To bi moglo izazvati prelijevanje sadržaja i horizontalno skrolanje.
 
-Zadržavanjem `border-box` modela širina kartica uključuje njihov padding i border, pa je raspored predvidljiviji i lakše se prilagođava različitim veličinama ekrana.
+Zadržavanjem `border-box` modela dimenzije elemenata su predvidljivije, a raspored se lakše prilagođava različitim veličinama ekrana.
 
 ## 4. Stacking context
 
-U zaglavlju se koristi `isolation: isolate`, čime `.site-header` formira zaseban stacking context. Elementi zaglavlja imaju lokalne `z-index` vrijednosti:
+U zaglavlju se koristi `isolation: isolate`, čime `.site-header` formira zaseban stacking context. Zaglavlje ima `position: relative` i `z-index: 1`, pa se prikazuje iznad glavnog sadržaja.
 
-- `.header-decoration` je dekorativni element u pozadini;
-- `.logo` i `.main-nav` su iznad dekoracije;
-- `.profile-menu` je iznad ostalih elemenata zaglavlja.
+- `.site-header::before` je dekorativni pseudo-element u pozadini;
+- `.logo`, `.main-nav` i `.profile-menu` imaju lokalni `z-index` iznad dekoracije;
+- profilni dropdown je apsolutno pozicioniran unutar `.profile-menu`.
 
-Profilni dropdown koristi `position: absolute` i prikazuje se kada korisnik pređe mišem preko profila ili fokusira njegov sadržaj tastaturom (`:hover` i `:focus-within`). Zaglavlje ima veći stacking prioritet u odnosu na glavni sadržaj kako bi se dropdown prikazao iznad kartica.
+Dropdown se može prikazati prelaskom miša, klikom na profilni checkbox ili fokusiranjem sadržaja tastaturom. `:focus-within` omogućava prikaz menija kada je fokus na nekom od njegovih potomaka.
 
-Na taj način se redoslijed slaganja elemenata kontroliše lokalnim i malim `z-index` vrijednostima, bez proizvoljno velikih brojeva.
+Na taj način redoslijed slaganja elemenata kontroliše se malim i smislenim `z-index` vrijednostima.
