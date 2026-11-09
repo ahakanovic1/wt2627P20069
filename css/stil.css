@@ -71,6 +71,10 @@
     --color-tip-border: #23834C;
     --color-info-bg: #F0F5EC;
     --color-info-border: #83B95A;
+    --color-progress-end: #83C95B;
+    --color-sidebar-icon: #42D96B;
+    --color-sidebar-icon-bg: rgba(66, 217, 107, 0.13);
+    --color-overview-item-bg: #DDEBE1;
 
     /* --- Statusne oznake --- */
     --badge-normal-bg: #DCFCE7;
@@ -154,6 +158,10 @@
         --color-tip-border: #48A66B;
         --color-info-bg: #1D3026;
         --color-info-border: #8BC85F;
+        --color-progress-end: #75C995;
+        --color-sidebar-icon: #75C995;
+        --color-sidebar-icon-bg: rgba(117, 201, 149, 0.14);
+        --color-overview-item-bg: #26382D;
 
         --badge-normal-bg: #1F4D32;
         --badge-normal-text: #C6F6D5;
@@ -893,7 +901,7 @@ body {
     width: 65%;
     height: 100%;
     border-radius: inherit;
-    background: linear-gradient(90deg, var(--color-primary), #83C95B);
+    background: linear-gradient(90deg, var(--color-primary), var(--color-progress-end));
 }
 
 .goal-progress-label {
@@ -1067,8 +1075,8 @@ body {
     flex-basis: 2.5rem;
     width: 2.5rem;
     height: 2.5rem;
-    color: #42D96B;
-    background-color: rgba(66, 217, 107, 0.13);
+    color: var(--color-sidebar-icon);
+    background-color: var(--color-sidebar-icon-bg);
 }
 
 .quick-overview .sidebar-icon svg {
@@ -1092,7 +1100,7 @@ body {
     padding: 0.75rem 0.85rem;
     border: 1px solid var(--color-border);
     border-radius: var(--radius-medium);
-    background-color: color-mix(in srgb, var(--color-surface) 72%, var(--color-primary) 28%);
+    background-color: var(--color-overview-item-bg);
 }
 
 .quick-overview .overview-icon {
@@ -1101,7 +1109,7 @@ body {
     justify-content: center;
     width: 2.5rem;
     height: 2.5rem;
-    color: #42D96B;
+    color: var(--color-sidebar-icon);
     background: transparent;
 }
 
