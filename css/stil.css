@@ -1,20 +1,6 @@
-/* =========================================================
-   EcoTrack – stil.css
-   1. Varijable (:root) i tamna tema
-   2. Osnovne postavke
-   3. Zaglavlje, navigacija i profil (dropdown)
-   4. Raspored glavnog dijela
-   5. Kartice
-   6. Forma
-   7. Tabela
-   8. Bočna traka i podnožje
-========================================================= */
-
-
-/* =========================================================
+/*
    1. VARIJABLE
-   Sve vrijednosti su ovdje. Tamna tema mijenja samo varijable.
-========================================================= */
+*/
 
 :root {
     color-scheme: light;
@@ -183,9 +169,9 @@
 }
 
 
-/* =========================================================
+/*
    2. OSNOVNE POSTAVKE
-========================================================= */
+*/
 
 *,
 *::before,
@@ -228,14 +214,9 @@ body {
 }
 
 
-/* =========================================================
+/*
    3. ZAGLAVLJE, NAVIGACIJA I PROFIL
-
-   Stacking context: zaglavlje ima position: relative i
-   z-index: 1, pa se crta iznad kartica. Kartice nemaju z-index;
-   kad im transform (hover) napravi svoj stacking context, one
-   su i dalje na nivou 0, dakle ispod zaglavlja i dropdowna.
-========================================================= */
+*/
 
 .site-header {
     position: relative;
@@ -333,8 +314,6 @@ body {
     outline-color: var(--color-on-brand);
 }
 
-/* Profil korisnika i dropdown */
-
 .profile-menu {
     margin-left: auto;
 }
@@ -360,7 +339,6 @@ body {
     background-color: var(--overlay-hover);
 }
 
-/* Checkbox je skriven, pa fokus crtamo na labeli */
 .profile-toggle:focus-visible + .profile-trigger {
     outline: var(--border-width-strong) solid var(--color-on-brand);
     outline-offset: var(--space-2xs);
@@ -400,8 +378,6 @@ body {
     box-shadow: var(--shadow-dropdown);
 }
 
-/* Prazan "most" preko razmaka između dugmeta i menija,
-   da se meni ne zatvori dok miš prelazi preko razmaka */
 .profile-dropdown::before {
     content: "";
     position: absolute;
@@ -409,8 +385,6 @@ body {
     height: var(--space-xs);
 }
 
-/* Meni se otvara: mišem, klikom (checkbox) ili tastaturom.
-   :focus-visible (a ne :focus-within) jer klik mišem ne smije držati meni otvorenim */
 .profile-menu:hover .profile-dropdown,
 .profile-toggle:checked ~ .profile-dropdown,
 .profile-menu:has(:focus-visible) .profile-dropdown {
@@ -437,12 +411,9 @@ body {
 }
 
 
-/* =========================================================
+/*
    4. RASPORED GLAVNOG DIJELA
-   Mobilno: sve jedna ispod druge.
-   Od 56rem: forma i historija jedna pored druge.
-   Od 90rem: bočna traka postaje treća kolona.
-========================================================= */
+*/
 
 .main-content {
     display: grid;
@@ -493,11 +464,9 @@ body {
 }
 
 
-/* =========================================================
+/*
    5. KARTICE
-   3 kolone -> 1 kolona bez @media: auto-fit + minmax.
-   min(100%, ...) sprječava da kartica bude šira od ekrana.
-========================================================= */
+*/
 
 .statistics-section {
     display: grid;
@@ -574,9 +543,9 @@ body {
 }
 
 
-/* =========================================================
+/*
    6. FORMA
-========================================================= */
+*/
 
 .measurement-section,
 .history-section {
@@ -674,8 +643,6 @@ legend {
     content: "⚠ ";
 }
 
-/* Validno: sva obavezna polja su na početku prazna (nevalidna),
-   pa se zelena ivica ne prikazuje odmah po učitavanju */
 .measurement-section input:not([type="checkbox"]):valid,
 .measurement-section select:valid {
     border-color: var(--color-valid);
@@ -720,12 +687,9 @@ legend {
 }
 
 
-/* =========================================================
+/*
    7. TABELA
-   .table-container ima max-height i overflow: auto, pa ima
-   vlastiti scroll (horizontalni i vertikalni), a thead
-   ostaje zalijepljen (sticky) na vrhu.
-========================================================= */
+*/
 
 .table-container {
     max-height: var(--table-max-height);
@@ -801,11 +765,9 @@ tbody tr:hover {
 }
 
 
-/* =========================================================
+/*
    8. BOČNA TRAKA I PODNOŽJE
-   Uži ekrani: sekcije jedna pored druge koliko stanu (auto-fit).
-   Od 90rem (vidi sekciju 4) ostaje jedna kolona.
-========================================================= */
+*/
 
 .eco-sidebar {
     display: grid;
@@ -831,7 +793,6 @@ tbody tr:hover {
     background-color: var(--color-info-bg);
 }
 
-/* Naslov sekcije: ikona + tekst u istom redu */
 .eco-sidebar h2 {
     display: flex;
     align-items: center;
@@ -873,7 +834,6 @@ tbody tr:hover {
     object-fit: contain;
 }
 
-/* Brzi pregled */
 
 .quick-overview .sidebar-icon {
     background-color: var(--color-accent-soft);
@@ -930,8 +890,6 @@ tbody tr:hover {
     white-space: nowrap;
 }
 
-/* Ekološki cilj */
-
 .eco-goal .goal-description {
     margin-bottom: var(--space-md);
 }
@@ -974,8 +932,6 @@ tbody tr:hover {
 .goal-progress-label strong {
     color: var(--color-text);
 }
-
-/* Podnožje */
 
 .site-footer {
     width: min(calc(100% - 2 * var(--gutter)), var(--content-max));
