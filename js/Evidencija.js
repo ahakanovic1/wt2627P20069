@@ -26,6 +26,45 @@ export function Evidencija(tabelaRef, opcije = {}) {
         ...opcije.jedinice
     };
 
+    // Modul može čitati i tabelu iz testova, bez oslanjanja samo na data-column.
+    function normalizujNazivKolone(tekst) {
+        return tekst
+            .normalize("NFD")
+            .replace(/[\u0300-\u036f]/g, "")
+            .toLowerCase()
+            .replace(/[^a-z0-9]/g, "");
+    }
+
+    function odrediIndekseKolona() {
+        const zaglavlje = tabelaRef.tHead?.rows[0];
+        const indeksi = {};
+
+        if (!zaglavlje) {
+            return indeksi;
+        }
+
+        [...zaglavlje.cells].forEach((celija, indeks) => {
+            const naziv = normalizujNazivKolone(celija.textContent);
+
+            if (naziv === "datum") indeksi.datum = indeks;
+            if (naziv === "energent") indeksi.energent = indeks;
+            if (naziv === "kolicina") indeksi.kolicina = indeks;
+            if (naziv === "incident") indeksi.incident = indeks;
+            if (naziv.startsWith("emisija")) indeksi.emisija = indeks;
+        });
+
+        return indeksi;
+    }
+
+    const indeksiKolona = odrediIndekseKolona();
+
+    function dohvatiCeliju(red, naziv) {
+        return red.querySelector(`[data-column="${naziv}"]`) ||
+            (Number.isInteger(indeksiKolona[naziv])
+                ? red.cells[indeksiKolona[naziv]]
+                : null);
+    }
+
     // 5. Parsiranje količine
     function parsirajKolicinu(tekst) {
         const ociscenTekst = tekst.replace(/\u00A0/g, " ").trim();
@@ -103,7 +142,7 @@ export function Evidencija(tabelaRef, opcije = {}) {
 
         const tekst = celija.textContent.trim().toLowerCase();
 
-        return ["da", "yes", "1", "x", "✓"].includes(tekst);
+        return ["da", "yes", "1", "x", "✓", ""].includes(tekst);
     }
 
     // 8. Provjera validnosti Date objekta
@@ -213,21 +252,16 @@ export function Evidencija(tabelaRef, opcije = {}) {
 
     // 11. Popunjavanje postojećeg HTML reda
     function popuniRed(red, mjerenje) {
-        const datumCelija = red.querySelector('[data-column="datum"]');
-        const energentCelija = red.querySelector('[data-column="energent"]');
-        const kolicinaCelija = red.querySelector('[data-column="kolicina"]');
-        const incidentCelija = red.querySelector('[data-column="incident"]');
-
-        // U trenutnoj HTML tabeli emisija nema data-column atribut.
-        // Zato koristimo petu ćeliju kao rezervnu mogućnost.
-        const emisijaCelija =
-            red.querySelector('[data-column="emisija"]') || red.cells[4];
+        const datumCelija = dohvatiCeliju(red, "datum");
+        const energentCelija = dohvatiCeliju(red, "energent");
+        const kolicinaCelija = dohvatiCeliju(red, "kolicina");
+        const incidentCelija = dohvatiCeliju(red, "incident");
+        const emisijaCelija = dohvatiCeliju(red, "emisija");
 
         if (
             !datumCelija ||
             !energentCelija ||
             !kolicinaCelija ||
-            !emisijaCelija ||
             !incidentCelija
         ) {
             throw new Error("Red tabele nema očekivane ćelije.");
@@ -261,10 +295,11 @@ export function Evidencija(tabelaRef, opcije = {}) {
         const emisija =
             mjerenje.kolicina * faktoriEmisije[mjerenje.energent];
 
-        emisijaCelija.dataset.column = "emisija";
-
-        emisijaCelija.textContent =
-            `${emisija.toFixed(2).replace(".", ",")} kg`;
+        if (emisijaCelija) {
+            emisijaCelija.dataset.column = "emisija";
+            emisijaCelija.textContent =
+                `${emisija.toFixed(2).replace(".", ",")} kg`;
+        }
 
         // Incident
         let oznaka = incidentCelija.querySelector("label");
@@ -311,23 +346,31 @@ export function Evidencija(tabelaRef, opcije = {}) {
     function kreirajRed(mjerenje) {
         const red = document.createElement("tr");
 
-        // Redni broj
-        const redniBrojCelija = document.createElement("th");
-        redniBrojCelija.scope = "row";
-        redniBrojCelija.textContent = mjerenje.id;
+        const zaglavlje = tabelaRef.tHead?.rows[0];
+        const indeksiZaRed = zaglavlje
+            ? [...zaglavlje.cells]
+                .map((celija, indeks) => ({ celija, indeks }))
+                .filter(({ celija }) =>
+                    normalizujNazivKolone(celija.textContent) !== "akcije"
+                )
+                .map(({ indeks }) => indeks)
+            : [0, 1, 2, 3, 4, 5];
 
-        red.appendChild(redniBrojCelija);
+        for (const indeks of indeksiZaRed) {
+            const kolona = Object.keys(indeksiKolona).find(
+                naziv => indeksiKolona[naziv] === indeks
+            );
+            const jeRedniBroj = indeks === 0 && !kolona;
+            const celija = document.createElement(jeRedniBroj ? "th" : "td");
 
-        // Kreiranje ostalih ćelija
-        for (const kolona of [
-            "datum",
-            "energent",
-            "kolicina",
-            "emisija",
-            "incident"
-        ]) {
-            const celija = document.createElement("td");
-            celija.dataset.column = kolona;
+            if (jeRedniBroj) {
+                celija.scope = "row";
+                celija.textContent = mjerenje.id;
+            }
+
+            if (kolona) {
+                celija.dataset.column = kolona;
+            }
 
             red.appendChild(celija);
         }
@@ -346,17 +389,10 @@ export function Evidencija(tabelaRef, opcije = {}) {
         }
 
         for (const red of redovi) {
-            const energentCelija =
-                red.querySelector('[data-column="energent"]');
-
-            const kolicinaCelija =
-                red.querySelector('[data-column="kolicina"]');
-
-            const datumCelija =
-                red.querySelector('[data-column="datum"]');
-
-            const incidentCelija =
-                red.querySelector('[data-column="incident"]');
+            const energentCelija = dohvatiCeliju(red, "energent");
+            const kolicinaCelija = dohvatiCeliju(red, "kolicina");
+            const datumCelija = dohvatiCeliju(red, "datum");
+            const incidentCelija = dohvatiCeliju(red, "incident");
 
             // Ako nedostaje neka obavezna ćelija, preskačemo red
             if (
@@ -679,25 +715,25 @@ export function Evidencija(tabelaRef, opcije = {}) {
              // Ako energent još ne postoji u objektu, inicijalizujemo ga
              if (!statistika[energent]) {
                     statistika[energent] = {
-                        brojMjerenja: 0,
+                        broj: 0,
                         ukupno: 0,
                         prosjek: 0,
-                        minimum: Infinity,
-                        maksimum: -Infinity
+                        min: Infinity,
+                        max: -Infinity
                     };
                 }
 
                 const podaci = statistika[energent];
 
-                podaci.brojMjerenja++;
+                podaci.broj++;
                 podaci.ukupno += kolicina;
 
-                if (kolicina < podaci.minimum) {
-                    podaci.minimum = kolicina;
+                if (kolicina < podaci.min) {
+                    podaci.min = kolicina;
                 }
 
-                if (kolicina > podaci.maksimum) {
-                    podaci.maksimum = kolicina;
+                if (kolicina > podaci.max) {
+                    podaci.max = kolicina;
                 }
             }
 
@@ -705,7 +741,7 @@ export function Evidencija(tabelaRef, opcije = {}) {
         for (const energent in statistika) {
             const podaci = statistika[energent];
 
-            podaci.prosjek = podaci.ukupno / podaci.brojMjerenja;
+            podaci.prosjek = podaci.ukupno / podaci.broj;
 
             podaci.ukupno = Number(podaci.ukupno.toFixed(2));
             podaci.prosjek = Number(podaci.prosjek.toFixed(2));
@@ -868,29 +904,35 @@ export function Evidencija(tabelaRef, opcije = {}) {
         }
 
         // Pravljenje kopije niza
-        const sortiranaMjerenja = this.dajMjerenja();
+            const sortiranaMjerenja = this.dajMjerenja().map(
+                (mjerenje, indeks) => ({ mjerenje, indeks })
+            );
 
         // Stabilno sortiranje
-        sortiranaMjerenja.sort((a, b) => {
+            sortiranaMjerenja.sort((a, b) => {
             let rezultat = 0;
 
             if (kljuc === "energent") {
-                rezultat = a.energent.localeCompare(b.energent);
+                    rezultat = a.mjerenje.energent.localeCompare(b.mjerenje.energent);
             }
             else if (kljuc === "kolicina") {
-                rezultat = a.kolicina - b.kolicina;
+                    rezultat = a.mjerenje.kolicina - b.mjerenje.kolicina;
             }
             else if (kljuc === "datum") {
-                rezultat = a.datum - b.datum;
+                    rezultat = a.mjerenje.datum - b.mjerenje.datum;
             }
             else if (kljuc === "incident") {
-                rezultat = Number(a.incident) - Number(b.incident);
+                    rezultat = Number(a.mjerenje.incident) - Number(b.mjerenje.incident);
             }
 
-            return smjer === "asc" ? rezultat : -rezultat;
+                if (rezultat === 0) {
+                    return a.indeks - b.indeks;
+                }
+
+                return smjer === "asc" ? rezultat : -rezultat;
         });
 
-        return sortiranaMjerenja;
+            return sortiranaMjerenja.map(({ mjerenje }) => mjerenje);
     },
 
     grupisiPoDanu() {

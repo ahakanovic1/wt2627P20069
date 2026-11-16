@@ -21,8 +21,6 @@ const karticaStatus = document.querySelector(
     '[data-testid="kartica-status"]'
 );
 
-const dugmeSubmit = forma.querySelector('[type="submit"]');
-
 // Provjera da li svi potrebni elementi postoje
 if (
     !forma ||
@@ -51,6 +49,16 @@ function formatirajBroj(broj) {
     return broj.toFixed(2).replace(".", ",");
 }
 
+function prikaziGreske(greske) {
+    poruke.replaceChildren();
+
+    for (const greska of greske) {
+        const redPoruke = document.createElement("p");
+        redPoruke.textContent = greska.poruka;
+        poruke.appendChild(redPoruke);
+    }
+}
+
 
 // --------------------------------------------------
 // 4. AŽURIRANJE TRI STATISTIČKE KARTICE
@@ -76,7 +84,7 @@ function azurirajKartice() {
     );
 
     karticaStatus.textContent = postojiIncident
-        ? "Kritično"
+        ? "Kriticno"
         : "Normalno";
 }
 
@@ -254,12 +262,8 @@ forma.addEventListener("submit", function(event) {
         else {
 
             // Izdvajamo poruke svih grešaka
-            const tekstGresaka = rezultat.greske
-                .map(greska => greska.poruka)
-                .join("\n");
-
-            // Ispisujemo greške kroz textContent
-            poruke.textContent = tekstGresaka;
+            // Ispisujemo svaku grešku u zasebnom redu preko textContent.
+            prikaziGreske(rezultat.greske);
 
             // Fokusiramo prvo neispravno polje
             const prvoPolje = rezultat.greske[0]?.polje;

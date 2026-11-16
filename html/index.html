@@ -154,7 +154,7 @@
             </header>
 
             <div class="table-container" role="region" aria-label="Tabela historije mjerenja (može se pomjerati)" tabindex="0">
-                <table data-testid="table">
+                <table data-testid="tabela">
                     <caption>Historija potrošnje energenata i emisije CO₂</caption>
 
                     <thead>
@@ -165,6 +165,7 @@
                             <th scope="col">Količina</th>
                             <th scope="col">Emisija CO₂</th>
                             <th scope="col">Incident</th>
+                            <th scope="col">Akcije</th>
                         </tr>
                     </thead>
 
@@ -174,7 +175,7 @@
                             <td data-column="datum"><time datetime="2026-11-03">03.11.2026.</time></td>
                             <td data-column="energent">Struja</td>
                             <td data-column="kolicina">125,50 kWh</td>
-                            <td>49,8 kg</td>
+                            <td data-column="emisija">49,8 kg</td>
                             <td data-column="incident">
                                 <label class="status-badge normal">
                                     <input type="checkbox" class="sr-only" disabled>
@@ -187,7 +188,7 @@
                             <td data-column="datum"><time datetime="2026-11-01">01.11.2026.</time></td>
                             <td data-column="energent">Plin</td>
                             <td data-column="kolicina">35,00 m³</td>
-                            <td>72,1 kg</td>
+                            <td data-column="emisija">72,1 kg</td>
                             <td data-column="incident">
                                 <label class="status-badge normal">
                                         <input type="checkbox" class="sr-only" disabled>
@@ -200,20 +201,20 @@
                             <td data-column="datum"><time datetime="2026-10-28">28.10.2026.</time></td>
                             <td data-column="energent">Voda</td>
                             <td data-column="kolicina">4,20 m³</td>
-                            <td>0,0 kg</td>
+                            <td data-column="emisija">0,0 kg</td>
                             <td data-column="incident">
                                 <label class="status-badge incident">
                                     <input type="checkbox" class="sr-only" checked disabled>
                                                 Incident
                                 </label>
-                        </td>
+                            </td>
                         </tr>
                         <tr>
                             <th scope="row">4</th>
                             <td data-column="datum"><time datetime="2026-10-25">25.10.2026.</time></td>
                             <td data-column="energent">Struja</td>
                             <td data-column="kolicina">98,30 kWh</td>
-                            <td>39,1 kg</td>
+                            <td data-column="emisija">39,1 kg</td>
                             <td data-column="incident">
                                 <label class="status-badge normal">
                                     <input type="checkbox" class="sr-only" disabled>
@@ -226,7 +227,7 @@
                             <td data-column="datum"><time datetime="2026-10-20">20.10.2026.</time></td>
                             <td data-column="energent">Plin</td>
                             <td data-column="kolicina">42,00 m³</td>
-                            <td>86,5 kg</td>
+                            <td data-column="emisija">86,5 kg</td>
                             <td data-column="incident">
                                 <label class="status-badge normal">
                                     <input type="checkbox" class="sr-only" disabled>
@@ -238,7 +239,7 @@
                             <td data-column="datum"><time datetime="2026-10-15">15.10.2026.</time></td>
                             <td data-column="energent">Voda</td>
                             <td data-column="kolicina">5,10 m³</td>
-                            <td>0,0 kg</td>
+                            <td data-column="emisija">0,0 kg</td>
                             <td data-column="incident">
                                 <label class="status-badge normal">
                                     <input type="checkbox" class="sr-only" disabled>
@@ -251,7 +252,7 @@
                             <td data-column="datum"><time datetime="2026-10-12">12.10.2026.</time></td>
                             <td data-column="energent">Struja</td>
                             <td data-column="kolicina">110,75 kWh</td>
-                            <td>44,0 kg</td>
+                            <td data-column="emisija">44,0 kg</td>
                             <td data-column="incident">
                                 <label class="status-badge normal">
                                     <input type="checkbox" class="sr-only" disabled>
@@ -264,7 +265,7 @@
                             <td data-column="datum"><time datetime="2026-10-08">08.10.2026.</time></td>
                             <td data-column="energent">Plin</td>
                             <td data-column="kolicina">38,50 m³</td>
-                            <td>79,3 kg</td>
+                            <td data-column="emisija">79,3 kg</td>
                             <td data-column="incident">
                                 <label class="status-badge normal">
                                     <input type="checkbox" class="sr-only" disabled>
@@ -277,7 +278,7 @@
                             <td data-column="datum"><time datetime="2026-10-03">03.10.2026.</time></td>
                             <td data-column="energent">Struja</td>
                             <td data-column="kolicina">142,00 kWh</td>
-                            <td>56,4 kg</td>
+                            <td data-column="emisija">56,4 kg</td>
                             <td data-column="incident">
                                 <label class="status-badge normal">
                                     <input type="checkbox" class="sr-only" checked disabled>

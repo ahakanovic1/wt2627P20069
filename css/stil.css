@@ -944,3 +944,26 @@ tbody tr:hover {
 .site-footer p {
     margin: 0;
 }
+
+@keyframes novi-red {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+.table-container tbody tr.--new {
+    animation: novi-red 2s ease;
+}
+
+.delete-button {
+    border: var(--border-width) solid var(--color-border);
+    border-radius: var(--radius-small);
+    background-color: var(--color-surface);
+    color: var(--color-text);
+    cursor: pointer;
+    font: inherit;
+}
