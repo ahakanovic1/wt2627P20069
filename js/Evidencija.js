@@ -2,7 +2,7 @@ export function Evidencija(tabelaRef, opcije = {}){
 
     //1. Provjer da li je proslijđena prava HTML tabela
     if(!(tabelaRef instanceof HTMLTableElement)){
-        throw new Error("Neispravna tabela")
+        throw new Error("Neispravna tabela!")
     }
 
     //2. Privatni podaci modula
@@ -105,6 +105,12 @@ export function Evidencija(tabelaRef, opcije = {}){
         return ["da", "yes", "1", "x", "✓"].includes(tekst);
     }
 
+    //dodajemo jos jednu metodu koja ce validirati datum
+    function validanDatum(datum){
+        return datum instanceof Date &&
+                Number.isFinite(datum.getTime());
+    }
+
     //8. Ucitavanje pocetnih mjerenja iz tabele
     function ucitajPocetnaMjerenja() {
         const redovi = tabelaRef.tBodies[0]?.rows;
@@ -113,7 +119,7 @@ export function Evidencija(tabelaRef, opcije = {}){
             return;
         }
 
-        for (const red in redovi){
+        for (const red of redovi){
             const energentCelija = red.querySelector('[data-column="energent"]');
             const kolicinaCelija = red.querySelector('[data-column="kolicina"]');
             const datumCelija = red.querySelector('[data-column="datum"]');
@@ -164,6 +170,228 @@ export function Evidencija(tabelaRef, opcije = {}){
 
     //Javen metode tek trebaju biti dodane
     return{
+        //1. Vraća mjerenja uz opcionalno filtriranje
+        dajMjerenja(filter = {}){
+
+            //Ako j eproslijeden null, koristimo prazan filter
+            filter = filter || {};
+
+            //Pretvaramo datume filtera u vremenske vrijednosti
+            const odDatuma = filter.odDatuma
+                ? new Date(filter.odDatuma).getTime()
+                : null;
+
+            const doDatuma = filter.doDatuma
+                ? new Date(filter.doDatuma).getTime()
+                : null;
+            
+            //Filtriramo mjerenja
+            const filtriranaMjerenja = mjerenja.filter(mjerenje =>{
+                
+                //Provjera energenata
+                if(filter.energent && 
+                    mjerenje.energent !== filter.energent.toLowerCase()
+                ){
+                    return false;
+                }
+                
+                //provjera pocetnog datuma
+                if(
+                    odDatuma !== null &&
+                    mjerenje.datum.getTime() < odDatuma
+                ){
+                    return false;
+                }
+
+                //Provjera zavrsnog datuma
+                if(
+                    doDatuma !== null &&
+                    mjerenje.datum.getTime() > doDatuma
+                ){
+                    return false;
+                }
+
+                // Provjera da li zelimo samo incidente
+                if(
+                    filter.samoIncidenti === true &&
+                    !mjerenje.incident
+                ){
+                    return false;
+                }
+
+                //ako nijedan uslov nije prekrsen, zadrzavamo mjerenje
+                return true;
+
+            });
+
+            return filtriranaMjerenja.map(mjerenje => ({
+                ...mjerenje,
+                datum: new Date(mjerenje.datum.getTime())
+            }));
+        },
+
+        dodajMjerenje(obj) {
+
+            const greske = [];
+
+            //1. Provjerava da li je proslijeđen objekat
+            if(!obj || typeof obj !== "object" || Array.isArray(obj)) {
+                return {
+                    uspjesno: false,
+                    greske: [{
+                        polje: "obj",
+                        poruka: "Morati proslijediti objekat mjerenja."
+                    }]
+                };
+            }
+
+            //2. Provjera energenta
+            const energent = typeof obj.energent === "string"
+                ? obj.energent.trim().toLowerCase()
+                : "";
+            
+            if(!["struja", "plin", "voda"].includes(energent)) {
+                greske.push({
+                    polje: "energent",
+                    poruka: "Energent mora biti struja, plin ili voda."
+                });
+            }
+
+            //3. provjera količine
+            const kolicina = Number(obj.kolicina);
+
+            if(
+                !Number.isFinite(kolicina) ||
+                kolicina <= 0 ||
+                Math.abs(kolicina*100 - Math.round(kolicina*100)) > 1e-8
+            ){
+                greske.push({
+                    polje: "kolicina",
+                    poruka: "količina mora biti pozitivan broj sa najviše dvije decimale."
+                });
+            }
+
+            // 4. Provjera datuma
+            if(!validanDatum(obj.datum)) {
+                greske.push({
+                    polje: "datum",
+                    poruka: "Datum nije ispravan"
+                });
+            }
+
+            // 5. Provjera incidenta
+            if (typeof obj.incident !== "boolean") {
+                greske.push({
+                    polje: "incident",
+                    poruka: "Incident mora biti true ili false."
+                });
+            }
+
+            // 6. Ako postoje greške, prekidamo dodavanje
+            if (greske.legth > 0) {
+                return{
+                    uspjesno: false,
+                    greske
+                };
+            }
+
+            // 7. Kreiranje novog mjrenja
+            const id = sljedeciId++;
+
+            const novoMjerenje = {
+                id,
+                energent,
+                kolicina,
+                datum: new Date(obj.datum.getTime()),
+                incident: obj.incident
+            };
+
+            //8.Dodavanje u privatni niz
+            mjerenja.push(novoMjerenje);
+
+            // 9. Kreiranje novog HTML reda
+            const red = document.createElement("tr");
+            red.dataset.id = id;
+
+            //Redni broj
+            const redniBrojCelija = document.createElement("th");
+            redniBrojCelija.scope = "row";
+            redniBrojCelija.textContent = id;
+            red.appendChild(redniBrojCelija);
+
+            //Datum
+            const datumCelija = document.createElement("td");
+            datumCelija.dataset.column = "datum";
+
+            const time = document.createElement("time");
+            time.dateTime = novoMjerenje.datum.toISOString().slice(0,10);
+
+            const dan = String(novoMjerenje.datum.getDate()).padStart(2,"0");
+            const mjesec = String(novoMjerenje.datum.getMonth()+1).padStart(2,"0");
+            const godina = novoMjerenje.datum.getFullYear();
+
+            time.textContent = `${dan}.${mjesec}.${godina}.`;
+            datumCelija.appendChild(time);
+            red.appendChild(datumCelija);
+
+            //Energent
+            const energentCelija = document.createElement("td");
+            energentCelija.dataset.column = "energent";
+            energentCelija.textContent = 
+                    energent.charAt(0).toUpperCase() + energent.slice(1);
+            red.appendChild(energentCelija);
+
+            //Kolicina
+            const kolicinaCelija = document.createElement("td");
+            kolicinaCelija.dataset.column = "kolicina";
+            kolicinaCelija.textContent = 
+                        `${kolicina.toFixed(2).replace(".", ",")} ${jedinice[energent]}`;
+            red.appendChild(kolicinaCelija);
+
+            //Emisija CO2
+            const emisija= kolicina * faktoriEmisije[energent];
+
+            const emisijaCelija = document.createElement("td");
+            emisijaCelija.textContent =
+                    `${emisija.toFixed(2).replace(".", ",")} kg`;
+            red.appendChild(kolicinaCelija);
+
+            //Incident
+            const incidentCelija = document.createElement("td");
+            incidentCelija.dataset.column = "incident";
+
+            const oznaka = document.createElement("label");
+            oznaka.className = novoMjerenje.incident
+            ? "status-badge incident"
+            : "status-badge normal";
+
+            const checkbox = document.createElement("input");
+            checkbox.type = "checkbox";
+            checkbox.className = "sr-only";
+            checkbox.disabled = true;
+            checkbox.checked = novoMjerenje.incident;
+
+            oznaka.appendChild(checkbox);
+            oznaka.appendChild(
+                document.createTextNode(
+                    novoMjerenje.incident ? "Incident" : "Normalno"
+                )
+            );
+
+            incidentCelija.appendChild(oznaka);
+            red.appendChild(incidentCelija);
+
+            //10. Dodavanej reda u tabelu
+            tabelaRef.tBodies[0].appendChild(red);
+
+            //11- Vracanej rezultata
+            return{
+                uspjesno: true,
+                greske: []
+            };
+        },
+
+        //2.Vraca brpj svih mjerenja
         brojMjerenja(){
             return mjerenja.length;
         }
