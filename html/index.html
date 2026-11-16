@@ -58,21 +58,21 @@
             <article class="stat-card co2">
                 <span class="stat-icon" aria-hidden="true">☁</span>
                 <h3>Ukupna emisija CO₂</h3>
-                <p>245,8 <span>kg CO₂</span></p>
+                <p data-testid="kartica-emisija">245,8 <span>kg CO₂</span></p>
                 <small>Ukupna evidentirana emisija</small>
             </article>
 
             <article class="stat-card energy">
                 <span class="stat-icon" aria-hidden="true">🌿</span>
                 <h3>Ušteda energije</h3>
-                <p>18,5%</p>
+                <p data-testid="kartica-usteda">18,5%</p>
                 <small>U odnosu na prethodni period</small>
             </article>
 
             <article class="stat-card status">
                 <span class="stat-icon" aria-hidden="true">✓</span>
                 <h3>Status postrojenja ElektroenergetskoPostrojenjeZenica2026Test</h3>
-                <p>Aktivno</p>
+                <p data-testid="kartica-status">Aktivno</p>
                 <small>Postrojenje radi u normalnom režimu</small>
             </article>
 
@@ -87,7 +87,7 @@
                 <p>Evidentiraj svoju potrošnju energenata i prati svoj ekološki otisak.</p>
             </header>
 
-            <form action="#" method="get">
+            <form action="#" method="get" data-testid="forma">
                 <fieldset>
                     <legend>Podaci o mjerenju</legend>
 
@@ -100,7 +100,7 @@
                         <span class="required-mark" aria-hidden="true">*</span>
                         <span class="sr-only">(obavezno)</span>
                     </label>
-                    <select id="energent" name="energent" required aria-describedby="energent-hint">
+                    <select id="energent" name="energent" data-testid="energent" aria-describedby="energent-hint">
                         <option value="">Odaberi energent</option>
                         <option value="struja">Struja</option>
                         <option value="plin">Plin</option>
@@ -113,7 +113,7 @@
                         <span class="required-mark" aria-hidden="true">*</span>
                         <span class="sr-only">(obavezno)</span>
                     </label>
-                    <input type="number" id="kolicina" name="kolicina"
+                    <input type="number" id="kolicina" name="kolicina" data-testid="kolicina"
                            min="0.01" max="999999.99" step="0.01"
                            inputmode="decimal" placeholder="Npr. 123.45"
                            required aria-describedby="kolicina-hint">
@@ -124,19 +124,23 @@
                         <span class="required-mark" aria-hidden="true">*</span>
                         <span class="sr-only">(obavezno)</span>
                     </label>
-                    <input type="date" id="datum" name="datum"
+                    <input type="date" id="datum" name="datum" data-testid="datum"
                            min="2026-01-01" max="2026-12-31"
                            required aria-describedby="datum-hint">
                     <small class="field-hint" id="datum-hint">Dozvoljen je samo datum u 2026. godini.</small>
 
                     <label class="incident-label" for="incident">
-                        <input type="checkbox" id="incident" name="incident">
+                        <input type="checkbox" id="incident" name="incident" data-testid="incident">
                         Hitna intervencija / Incident
                     </label>
 
-                    <button type="submit" class="submit-button">Sačuvaj mjerenje</button>
+                    <button type="submit" class="submit-button" data-testid="submit">Sačuvaj mjerenje</button>
                 </fieldset>
             </form>
+
+            <div id="poruke" data-testid="poruke"
+                role="status" aria-live="polite">
+            </div>
 
         </section>
 
@@ -150,7 +154,7 @@
             </header>
 
             <div class="table-container" role="region" aria-label="Tabela historije mjerenja (može se pomjerati)" tabindex="0">
-                <table>
+                <table data-testid="table">
                     <caption>Historija potrošnje energenata i emisije CO₂</caption>
 
                     <thead>
@@ -160,82 +164,126 @@
                             <th scope="col">Energent</th>
                             <th scope="col">Količina</th>
                             <th scope="col">Emisija CO₂</th>
-                            <th scope="col">Status</th>
+                            <th scope="col">Incident</th>
                         </tr>
                     </thead>
 
                     <tbody>
                         <tr>
                             <th scope="row">1</th>
-                            <td><time datetime="2026-11-03">03.11.2026.</time></td>
-                            <td>Struja</td>
-                            <td>125,50 kWh</td>
+                            <td data-column="datum"><time datetime="2026-11-03">03.11.2026.</time></td>
+                            <td data-column="energent">Struja</td>
+                            <td data-column="kolicina">125,50 kWh</td>
                             <td>49,8 kg</td>
-                            <td><span class="status-badge normal">Normalno</span></td>
+                            <td data-column="incident">
+                                <label class="status-badge normal">
+                                    <input type="checkbox" class="sr-only" disabled>
+                                                 Normalno
+                                </label>
+                            </td>
                         </tr>
                         <tr>
                             <th scope="row">2</th>
-                            <td><time datetime="2026-11-01">01.11.2026.</time></td>
-                            <td>Plin</td>
-                            <td>35,00 m³</td>
+                            <td data-column="datum"><time datetime="2026-11-01">01.11.2026.</time></td>
+                            <td data-column="energent">Plin</td>
+                            <td data-column="kolicina">35,00 m³</td>
                             <td>72,1 kg</td>
-                            <td><span class="status-badge normal">Normalno</span></td>
+                            <td data-column="incident">
+                                <label class="status-badge normal">
+                                        <input type="checkbox" class="sr-only" disabled>
+                                                Normalno
+                                </label>
+                            </td>
                         </tr>
                         <tr>
                             <th scope="row">3</th>
-                            <td><time datetime="2026-10-28">28.10.2026.</time></td>
-                            <td>Voda</td>
-                            <td>4,20 m³</td>
+                            <td data-column="datum"><time datetime="2026-10-28">28.10.2026.</time></td>
+                            <td data-column="energent">Voda</td>
+                            <td data-column="kolicina">4,20 m³</td>
                             <td>0,0 kg</td>
-                            <td><span class="status-badge incident">Incident</span></td>
+                            <td data-column="incident">
+                                <label class="status-badge incident">
+                                    <input type="checkbox" class="sr-only" checked disabled>
+                                                Incident
+                                </label>
+                        </td>
                         </tr>
                         <tr>
                             <th scope="row">4</th>
-                            <td><time datetime="2026-10-25">25.10.2026.</time></td>
-                            <td>Struja</td>
-                            <td>98,30 kWh</td>
+                            <td data-column="datum"><time datetime="2026-10-25">25.10.2026.</time></td>
+                            <td data-column="energent">Struja</td>
+                            <td data-column="kolicina">98,30 kWh</td>
                             <td>39,1 kg</td>
-                            <td><span class="status-badge normal">Normalno</span></td>
+                            <td data-column="incident">
+                                <label class="status-badge normal">
+                                    <input type="checkbox" class="sr-only" disabled>
+                                    Normalno
+                                </label>
+                            </td>
                         </tr>
                         <tr>
                             <th scope="row">5</th>
-                            <td><time datetime="2026-10-20">20.10.2026.</time></td>
-                            <td>Plin</td>
-                            <td>42,00 m³</td>
+                            <td data-column="datum"><time datetime="2026-10-20">20.10.2026.</time></td>
+                            <td data-column="energent">Plin</td>
+                            <td data-column="kolicina">42,00 m³</td>
                             <td>86,5 kg</td>
-                            <td><span class="status-badge normal">Normalno</span></td>
+                            <td data-column="incident">
+                                <label class="status-badge normal">
+                                    <input type="checkbox" class="sr-only" disabled>
+                                    Normalno
+                                </label></td>
                         </tr>
                         <tr>
                             <th scope="row">6</th>
-                            <td><time datetime="2026-10-15">15.10.2026.</time></td>
-                            <td>Voda</td>
-                            <td>5,10 m³</td>
+                            <td data-column="datum"><time datetime="2026-10-15">15.10.2026.</time></td>
+                            <td data-column="energent">Voda</td>
+                            <td data-column="kolicina">5,10 m³</td>
                             <td>0,0 kg</td>
-                            <td><span class="status-badge normal">Normalno</span></td>
+                            <td data-column="incident">
+                                <label class="status-badge normal">
+                                    <input type="checkbox" class="sr-only" disabled>
+                                    Normalno
+                                </label>
+                            </td>
                         </tr>
                         <tr>
                             <th scope="row">7</th>
-                            <td><time datetime="2026-10-12">12.10.2026.</time></td>
-                            <td>Struja</td>
-                            <td>110,75 kWh</td>
+                            <td data-column="datum"><time datetime="2026-10-12">12.10.2026.</time></td>
+                            <td data-column="energent">Struja</td>
+                            <td data-column="kolicina">110,75 kWh</td>
                             <td>44,0 kg</td>
-                            <td><span class="status-badge normal">Normalno</span></td>
+                            <td data-column="incident">
+                                <label class="status-badge normal">
+                                    <input type="checkbox" class="sr-only" disabled>
+                                    Normalno
+                                </label>
+                            </td>
                         </tr>
                         <tr>
                             <th scope="row">8</th>
-                            <td><time datetime="2026-10-08">08.10.2026.</time></td>
-                            <td>Plin</td>
-                            <td>38,50 m³</td>
+                            <td data-column="datum"><time datetime="2026-10-08">08.10.2026.</time></td>
+                            <td data-column="energent">Plin</td>
+                            <td data-column="kolicina">38,50 m³</td>
                             <td>79,3 kg</td>
-                            <td><span class="status-badge normal">Normalno</span></td>
+                            <td data-column="incident">
+                                <label class="status-badge normal">
+                                    <input type="checkbox" class="sr-only" disabled>
+                                    Normalno
+                                </label>
+                            </td>
                         </tr>
                         <tr>
                             <th scope="row">9</th>
-                            <td><time datetime="2026-10-03">03.10.2026.</time></td>
-                            <td>Struja</td>
-                            <td>142,00 kWh</td>
+                            <td data-column="datum"><time datetime="2026-10-03">03.10.2026.</time></td>
+                            <td data-column="energent">Struja</td>
+                            <td data-column="kolicina">142,00 kWh</td>
                             <td>56,4 kg</td>
-                            <td><span class="status-badge incident">Incident</span></td>
+                            <td data-column="incident">
+                                <label class="status-badge normal">
+                                    <input type="checkbox" class="sr-only" checked disabled>
+                                    Incident
+                                </label>
+                            </td>
                         </tr>
                     </tbody>
                 </table>
@@ -308,5 +356,6 @@
         <p>EcoTrack · Web tehnologije 2026/27 · Spirala 1</p>
     </footer>
 
+<script type="module" src="../js/app.js"></script>
 </body>
 </html>
