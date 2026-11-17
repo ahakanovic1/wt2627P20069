@@ -626,20 +626,20 @@ legend {
 
 /* Nevalidno: samo nakon interakcije (:user-invalid).
    Ne oslanjamo se samo na boju, tekst postaje podebljan i dobija ikonu. */
-.measurement-section input:user-invalid,
-.measurement-section select:user-invalid {
+.measurement-section form:not([novalidate]) input:user-invalid,
+.measurement-section form:not([novalidate]) select:user-invalid {
     border-color: var(--color-danger);
     box-shadow: 0 0 0 var(--border-width) var(--color-danger);
 }
 
-.measurement-section input:user-invalid + .field-hint,
-.measurement-section select:user-invalid + .field-hint {
+.measurement-section form:not([novalidate]) input:user-invalid + .field-hint,
+.measurement-section form:not([novalidate]) select:user-invalid + .field-hint {
     color: var(--color-danger);
     font-weight: 700;
 }
 
-.measurement-section input:user-invalid + .field-hint::before,
-.measurement-section select:user-invalid + .field-hint::before {
+.measurement-section form:not([novalidate]) input:user-invalid + .field-hint::before,
+.measurement-section form:not([novalidate]) select:user-invalid + .field-hint::before {
     content: "⚠ ";
 }
 
@@ -647,6 +647,60 @@ legend {
 .measurement-section select:valid {
     border-color: var(--color-valid);
     box-shadow: 0 0 0 var(--border-width) var(--color-valid);
+}
+
+.measurement-section input:not([type="checkbox"])[aria-invalid="true"],
+.measurement-section select[aria-invalid="true"] {
+    border-color: var(--color-danger);
+    box-shadow: 0 0 0 var(--border-width) var(--color-danger);
+}
+
+.date-preview:not(:empty) {
+    display: block;
+    margin: calc(-1 * var(--space-xs)) 0 var(--space-md);
+    color: var(--color-text-secondary);
+    font-size: var(--font-size-small);
+}
+
+#poruke:not(:empty) {
+    margin-top: var(--space-md);
+    padding: var(--space-md);
+    border: var(--border-width) solid var(--color-border);
+    border-radius: var(--radius-small);
+}
+
+#poruke.poruka-greska {
+    background-color: var(--badge-incident-bg);
+    border-color: var(--color-danger);
+    color: var(--badge-incident-text);
+}
+
+#poruke.poruka-uspjeh {
+    background-color: var(--badge-normal-bg);
+    border-color: var(--color-valid);
+    color: var(--badge-normal-text);
+}
+
+#poruke.poruka-greska strong::before {
+    content: "⚠ ";
+}
+
+#poruke.poruka-uspjeh::before {
+    content: "✓ ";
+    font-weight: 700;
+}
+
+#poruke p {
+    margin: var(--space-xs) 0;
+}
+
+#poruke ul {
+    margin: var(--space-xs) 0 0;
+    padding-left: var(--space-lg);
+}
+
+#poruke li + li {
+    margin-top: var(--space-2xs);
 }
 
 .measurement-section .incident-label {
@@ -890,6 +944,34 @@ tbody tr:hover {
     white-space: nowrap;
 }
 
+.eco-tip label {
+    display: block;
+    margin: var(--space-md) 0 var(--space-xs);
+    font-size: var(--font-size-small);
+    font-weight: 600;
+}
+
+.eco-tip select {
+    width: 100%;
+    min-height: 3rem;
+    padding: var(--space-sm);
+    border: var(--border-width) solid var(--color-input-border);
+    border-radius: var(--radius-small);
+    background-color: var(--color-input-bg);
+    color: var(--color-text);
+    font: inherit;
+}
+
+.eco-tip select:focus-visible {
+    outline: var(--border-width-strong) solid var(--color-focus);
+    outline-offset: var(--space-2xs);
+}
+
+.eco-tip #analiza-rezultat,
+.eco-goal .goal-detail {
+    margin-top: var(--space-sm);
+}
+
 .eco-goal .goal-description {
     margin-bottom: var(--space-md);
 }
@@ -945,25 +1027,34 @@ tbody tr:hover {
     margin: 0;
 }
 
-@keyframes novi-red {
+/* Animacija novododanog mjerenja */
+tr.--new {
+    animation: fadeInRow 0.6s ease-in-out;
+}
+
+@keyframes fadeInRow {
     from {
         opacity: 0;
+        background-color: #d9f7df;
     }
 
     to {
         opacity: 1;
+        background-color: transparent;
     }
 }
 
-.table-container tbody tr.--new {
-    animation: novi-red 2s ease;
+/* Dugme za brisanje */
+.delete-button {
+    padding: 7px 12px;
+    border: none;
+    border-radius: 6px;
+    background-color: #dc3545;
+    color: white;
+    cursor: pointer;
+    font-size: 13px;
 }
 
-.delete-button {
-    border: var(--border-width) solid var(--color-border);
-    border-radius: var(--radius-small);
-    background-color: var(--color-surface);
-    color: var(--color-text);
-    cursor: pointer;
-    font: inherit;
+.delete-button:hover {
+    background-color: #b02a37;
 }

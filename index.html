@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>EcoTrack</title>
-    <link rel="stylesheet" href="../css/stil.css">
+    <link rel="stylesheet" href="css/stil.css">
 </head>
 
 <body>
@@ -13,7 +13,7 @@
     <header class="site-header">
 
         <h1 class="logo">
-            <img src="../slike/ecotrack-logo.png" alt="">
+            <img src="slike/ecotrack-logo.png" alt="">
             EcoTrack
         </h1>
 
@@ -71,7 +71,7 @@
 
             <article class="stat-card status">
                 <span class="stat-icon" aria-hidden="true">✓</span>
-                <h3>Status postrojenja ElektroenergetskoPostrojenjeZenica2026Test</h3>
+                <h3>Status Fabrike</h3>
                 <p data-testid="kartica-status">Aktivno</p>
                 <small>Postrojenje radi u normalnom režimu</small>
             </article>
@@ -100,7 +100,7 @@
                         <span class="required-mark" aria-hidden="true">*</span>
                         <span class="sr-only">(obavezno)</span>
                     </label>
-                    <select id="energent" name="energent" data-testid="energent" aria-describedby="energent-hint">
+                    <select id="energent" name="energent" data-testid="energent" required aria-describedby="energent-hint">
                         <option value="">Odaberi energent</option>
                         <option value="struja">Struja</option>
                         <option value="plin">Plin</option>
@@ -126,8 +126,9 @@
                     </label>
                     <input type="date" id="datum" name="datum" data-testid="datum"
                            min="2026-01-01" max="2026-12-31"
-                           required aria-describedby="datum-hint">
+                           required aria-describedby="datum-hint datum-prikaz">
                     <small class="field-hint" id="datum-hint">Dozvoljen je samo datum u 2026. godini.</small>
+                    <small class="date-preview" id="datum-prikaz" aria-live="polite"></small>
 
                     <label class="incident-label" for="incident">
                         <input type="checkbox" id="incident" name="incident" data-testid="incident">
@@ -175,7 +176,7 @@
                             <td data-column="datum"><time datetime="2026-11-03">03.11.2026.</time></td>
                             <td data-column="energent">Struja</td>
                             <td data-column="kolicina">125,50 kWh</td>
-                            <td data-column="emisija">49,8 kg</td>
+                            <td>49,8 kg</td>
                             <td data-column="incident">
                                 <label class="status-badge normal">
                                     <input type="checkbox" class="sr-only" disabled>
@@ -188,7 +189,7 @@
                             <td data-column="datum"><time datetime="2026-11-01">01.11.2026.</time></td>
                             <td data-column="energent">Plin</td>
                             <td data-column="kolicina">35,00 m³</td>
-                            <td data-column="emisija">72,1 kg</td>
+                            <td>72,1 kg</td>
                             <td data-column="incident">
                                 <label class="status-badge normal">
                                         <input type="checkbox" class="sr-only" disabled>
@@ -201,20 +202,20 @@
                             <td data-column="datum"><time datetime="2026-10-28">28.10.2026.</time></td>
                             <td data-column="energent">Voda</td>
                             <td data-column="kolicina">4,20 m³</td>
-                            <td data-column="emisija">0,0 kg</td>
+                            <td>0,0 kg</td>
                             <td data-column="incident">
                                 <label class="status-badge incident">
                                     <input type="checkbox" class="sr-only" checked disabled>
                                                 Incident
                                 </label>
-                            </td>
+                        </td>
                         </tr>
                         <tr>
                             <th scope="row">4</th>
                             <td data-column="datum"><time datetime="2026-10-25">25.10.2026.</time></td>
                             <td data-column="energent">Struja</td>
                             <td data-column="kolicina">98,30 kWh</td>
-                            <td data-column="emisija">39,1 kg</td>
+                            <td>39,1 kg</td>
                             <td data-column="incident">
                                 <label class="status-badge normal">
                                     <input type="checkbox" class="sr-only" disabled>
@@ -227,7 +228,7 @@
                             <td data-column="datum"><time datetime="2026-10-20">20.10.2026.</time></td>
                             <td data-column="energent">Plin</td>
                             <td data-column="kolicina">42,00 m³</td>
-                            <td data-column="emisija">86,5 kg</td>
+                            <td>86,5 kg</td>
                             <td data-column="incident">
                                 <label class="status-badge normal">
                                     <input type="checkbox" class="sr-only" disabled>
@@ -239,7 +240,7 @@
                             <td data-column="datum"><time datetime="2026-10-15">15.10.2026.</time></td>
                             <td data-column="energent">Voda</td>
                             <td data-column="kolicina">5,10 m³</td>
-                            <td data-column="emisija">0,0 kg</td>
+                            <td>0,0 kg</td>
                             <td data-column="incident">
                                 <label class="status-badge normal">
                                     <input type="checkbox" class="sr-only" disabled>
@@ -252,7 +253,7 @@
                             <td data-column="datum"><time datetime="2026-10-12">12.10.2026.</time></td>
                             <td data-column="energent">Struja</td>
                             <td data-column="kolicina">110,75 kWh</td>
-                            <td data-column="emisija">44,0 kg</td>
+                            <td>44,0 kg</td>
                             <td data-column="incident">
                                 <label class="status-badge normal">
                                     <input type="checkbox" class="sr-only" disabled>
@@ -265,7 +266,7 @@
                             <td data-column="datum"><time datetime="2026-10-08">08.10.2026.</time></td>
                             <td data-column="energent">Plin</td>
                             <td data-column="kolicina">38,50 m³</td>
-                            <td data-column="emisija">79,3 kg</td>
+                            <td>79,3 kg</td>
                             <td data-column="incident">
                                 <label class="status-badge normal">
                                     <input type="checkbox" class="sr-only" disabled>
@@ -278,13 +279,12 @@
                             <td data-column="datum"><time datetime="2026-10-03">03.10.2026.</time></td>
                             <td data-column="energent">Struja</td>
                             <td data-column="kolicina">142,00 kWh</td>
-                            <td data-column="emisija">56,4 kg</td>
+                            <td>56,4 kg</td>
                             <td data-column="incident">
-                                <label class="status-badge normal">
+                                <label class="status-badge incident">
                                     <input type="checkbox" class="sr-only" checked disabled>
-                                    Incident
+                                                Incident
                                 </label>
-                            </td>
                         </tr>
                     </tbody>
                 </table>
@@ -298,15 +298,15 @@
 
             <section class="quick-overview" aria-labelledby="quick-overview-title">
                 <h2 id="quick-overview-title">
-                    <span class="sidebar-icon"><img src="../slike/zelena-munja.png" alt=""></span>
+                    <span class="sidebar-icon"><img src="slike/zelena-munja.png" alt=""></span>
                     Brzi pregled
                 </h2>
 
                 <ul class="overview-list">
                     <li class="overview-item">
-                        <span class="overview-icon"><img src="../slike/zeleni-papiri.png" alt=""></span>
+                        <span class="overview-icon"><img src="slike/zeleni-papiri.png" alt=""></span>
                         <span class="overview-label">Ukupno mjerenja</span>
-                        <strong>24</strong>
+                        <strong data-testid="pregled-broj-mjerenja">0</strong>
                     </li>
                     <li class="overview-item">
                         <span class="overview-icon">
@@ -316,36 +316,40 @@
                             </svg>
                         </span>
                         <span class="overview-label">Datum posljednjeg mjerenja</span>
-                        <strong><time datetime="2026-11-03">03.11.</time></strong>
+                        <strong data-testid="pregled-zadnje-mjerenje">—</strong>
                     </li>
                 </ul>
             </section>
 
-            <section class="eco-tip" aria-labelledby="eco-tip-title">
-                <h2 id="eco-tip-title">
-                    <span class="sidebar-icon"><img src="../slike/eko-recikliranje.png" alt=""></span>
-                    Eko-savjet dana
+            <section class="eco-tip" aria-labelledby="analiza-title">
+                <h2 id="analiza-title">
+                    <span class="sidebar-icon"><img src="slike/eko-recikliranje.png" alt=""></span>
+                    Analiza potrošnje energenata
                 </h2>
-                <article>
-                    <h3>Štednja električne energije</h3>
-                    <p>
-                        Isključuj električne uređaje kada ih ne koristiš.
-                        Na taj način smanjuješ nepotrebnu potrošnju energije.
-                    </p>
-                </article>
+                <p>Saznaj u kojem mjesecu je prosječna potrošnja odabranog energenta bila najveća.</p>
+                <label for="analiza-energent">Odaberi energent</label>
+                <select id="analiza-energent" data-testid="analiza-energent" aria-describedby="analiza-rezultat">
+                    <option value="">Odaberi energent</option>
+                    <option value="struja">Struja</option>
+                    <option value="plin">Plin</option>
+                    <option value="voda">Voda</option>
+                </select>
+                <p id="analiza-rezultat" data-testid="analiza-rezultat" aria-live="polite">Odaberite energent za prikaz analize potrošnje.</p>
             </section>
 
             <section class="eco-goal" aria-labelledby="eco-goal-title">
                 <h2 id="eco-goal-title">
-                    <span class="sidebar-icon"><img src="../slike/zastavica-cilj.png" alt=""></span>
+                    <span class="sidebar-icon"><img src="slike/zastavica-cilj.png" alt=""></span>
                     Tvoj ekološki cilj
                 </h2>
-                <p class="goal-description">Smanjiti emisiju CO₂ za 10% u odnosu na prethodni period.</p>
-                <progress class="goal-progress" value="65" max="100" aria-label="Napredak prema ekološkom cilju">65%</progress>
+                <p class="goal-description">Ostvariti uštedu od najmanje 25% ukupne evidentirane emisije CO₂.</p>
+                <progress class="goal-progress" data-testid="cilj-napredak" value="0" max="100" aria-label="Napredak prema ekološkom cilju">0%</progress>
                 <p class="goal-progress-label">
-                    <span>Ostvareni napredak</span>
-                    <strong>65%</strong>
+                    <span>Napredak prema cilju</span>
+                    <strong data-testid="cilj-napredak-tekst">—</strong>
                 </p>
+                <p class="goal-detail" data-testid="cilj-usteda"></p>
+                <p class="goal-detail" data-testid="cilj-preostalo" aria-live="polite">Nema dovoljno podataka za procjenu ekološkog cilja</p>
             </section>
 
         </aside>
@@ -357,6 +361,6 @@
         <p>EcoTrack · Web tehnologije 2026/27 · Spirala 1</p>
     </footer>
 
-<script type="module" src="../js/app.js"></script>
+<script type="module" src="js/app.js"></script>
 </body>
 </html>
