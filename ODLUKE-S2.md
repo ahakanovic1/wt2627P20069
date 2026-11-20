@@ -14,7 +14,7 @@ Na `#poruke` koristim `aria-live="polite"` uz `role="status"`. Poruka se najavi 
 
 ## 4. Debounce
 
-Prije obrade svakog novog submit događaja pozivam `clearTimeout(debounceTimer)`, a obradu pokrećem nakon 300 ms pomoću `setTimeout`. To sprječava da više brzih klikova doda više jednakih mjerenja. Kod klasičnog slanja forme bez JavaScript handlera ovaj debounce ne postoji; tada bi zaštitu od duplikata morao osigurati server.
+Prvi submit obrađujem odmah, a naredne pokušaje u istom brzom nizu zanemarujem. Svaki pokušaj ponovo pokreće timer od 300 ms, nakon čega je moguć novi unos. Tako se izbjegava više jednakih mjerenja zbog brzih klikova. Kod klasičnog slanja forme bez JavaScript handlera ovaj debounce ne postoji; tada bi zaštitu od duplikata morao osigurati server.
 
 ## 5. Stabilno sortiranje
 

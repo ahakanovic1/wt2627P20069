@@ -1,5 +1,5 @@
 
-export function Evidencija(tabelaRef, opcije = {}) {
+function Evidencija(tabelaRef, opcije = {}) {
 
     // 1. Provjera ispravnosti proslijeđene tabele
     if (!(tabelaRef instanceof HTMLTableElement)) {
@@ -276,7 +276,7 @@ export function Evidencija(tabelaRef, opcije = {}) {
 
         if (!time) {
             time = document.createElement("time");
-            datumCelija.appendChild(time);
+            datumCelija.replaceChildren(time);
         }
 
         time.dateTime = datum.iso;
@@ -306,7 +306,7 @@ export function Evidencija(tabelaRef, opcije = {}) {
 
         if (!oznaka) {
             oznaka = document.createElement("label");
-            incidentCelija.appendChild(oznaka);
+            incidentCelija.replaceChildren(oznaka);
         }
 
         oznaka.className = mjerenje.incident
@@ -858,7 +858,7 @@ export function Evidencija(tabelaRef, opcije = {}) {
                     mjerenje.id,
                     mjerenje.energent,
                     mjerenje.kolicina,
-                    mjerenje.datum.toISOString().split("T")[0],
+                    formatirajDatum(mjerenje.datum).iso,
                     mjerenje.incident
                 ];
             });

@@ -1,5 +1,5 @@
 
-import { Evidencija } from "./Evidencija.js";
+const { Evidencija } = window;
 
 // --------------------------------------------------
 // 1. PRONALAŽENJE HTML ELEMENATA
@@ -45,6 +45,15 @@ const analizaRezultat = document.querySelector('[data-testid="analiza-rezultat"]
 
 // JavaScript prikazuje sve greške; bez njega ostaje ugrađena HTML validacija.
 forma.noValidate = true;
+
+const poljeDatuma = forma.elements["datum"];
+if (poljeDatuma) {
+    const godina = new Date().getFullYear();
+    poljeDatuma.min = `${godina}-01-01`;
+    poljeDatuma.max = `${godina}-12-31`;
+    const uputa = document.getElementById("datum-hint");
+    if (uputa) uputa.textContent = `Dozvoljen je samo datum u ${godina}. godini.`;
+}
 
 
 // --------------------------------------------------
@@ -357,11 +366,14 @@ forma.addEventListener("submit", function(event) {
     // Sprečavamo standardno slanje forme
     event.preventDefault();
 
-    // Svaki novi submit poništava prethodni timer
+    // Prvi submit obrađujemo odmah; ponovljene pokušaje u kratkom nizu preskačemo.
+    const prviPokusaj = debounceTimer === null;
     clearTimeout(debounceTimer);
-
-    // Obradu izvršavamo 300 ms nakon posljednjeg submit događaja
     debounceTimer = setTimeout(() => {
+        debounceTimer = null;
+    }, 300);
+
+    if (!prviPokusaj) return;
 
         const energent = forma.elements["energent"].value;
 
@@ -448,10 +460,6 @@ forma.addEventListener("submit", function(event) {
                 forma.elements[prvoPolje].focus();
             }
         }
-
-        debounceTimer = null;
-
-    }, 300);
 
 });
 
