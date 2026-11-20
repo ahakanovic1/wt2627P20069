@@ -2,7 +2,7 @@
 
 ## 1. Kreiranje reda i XSS zaštita
 
-Novi red dodajem u `dodajMjerenje()` pozivom `tbody.appendChild(red)` u `Evidencija.js` (linija 542). Tekst u ćelije upisujem preko `textContent`, jer tada unos ostaje običan tekst. Da koristim `innerHTML`, unos poput `<script>alert(1)</script>` bi se tumačio kao HTML i mogao bi otvoriti prostor za XSS napad.
+Novi red dodajem u `dodajMjerenje()` pozivom `tbody.appendChild(red)` u `Evidencija.js` (linija 550). Tekst u ćelije upisujem preko `textContent`, jer tada unos ostaje običan tekst. Da koristim `innerHTML`, unos poput `<script>alert(1)</script>` bi se tumačio kao HTML i mogao bi otvoriti prostor za XSS napad.
 
 ## 2. Immutability
 

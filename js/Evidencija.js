@@ -65,6 +65,18 @@ function Evidencija(tabelaRef, opcije = {}) {
                 : null);
     }
 
+    // Količina mora biti broj čiji se iznos u stotinkama može sigurno predstaviti.
+    function validnaKolicina(kolicina) {
+        if (typeof kolicina !== "number" || !Number.isFinite(kolicina) || kolicina <= 0) {
+            return false;
+        }
+
+        const stotinke = kolicina * 100;
+        const zaokruzeneStotinke = Math.round(stotinke);
+        return zaokruzeneStotinke > 0 && Number.isSafeInteger(zaokruzeneStotinke) &&
+            Math.abs(stotinke - zaokruzeneStotinke) <= 1e-8;
+    }
+
     // 5. Parsiranje količine
     function parsirajKolicinu(tekst) {
         const ociscenTekst = tekst.replace(/\u00A0/g, " ").trim();
@@ -79,7 +91,7 @@ function Evidencija(tabelaRef, opcije = {}) {
 
         const broj = Number(poklapanje[1].replace(",", "."));
 
-        if (!Number.isFinite(broj) || broj <= 0) {
+        if (!validnaKolicina(broj)) {
             return null;
         }
 
@@ -182,13 +194,9 @@ function Evidencija(tabelaRef, opcije = {}) {
         }
 
         // Provjera količine
-        const kolicina = Number(obj.kolicina);
+        const kolicina = obj.kolicina;
 
-        if (
-            !Number.isFinite(kolicina) ||
-            kolicina <= 0 ||
-            Math.abs(kolicina * 100 - Math.round(kolicina * 100)) > 1e-8
-        ) {
+        if (!validnaKolicina(kolicina)) {
             greske.push({
                 polje: "kolicina",
                 poruka: "Količina mora biti pozitivan broj sa najviše dvije decimale."
@@ -751,48 +759,44 @@ function Evidencija(tabelaRef, opcije = {}) {
     },
     prosjecnaPotrosnja(energent, period) {
         const danas = new Date();
-        danas.setHours(23, 59, 59, 999);
-
-        let brojDana;
-
-                switch (period) {
-                    case "sedmica":
-                        brojDana = 7;
-                        break;
-
-                    case "mjesec":
-                        brojDana = 30;
-                        break;
-
-                    case "godina":
-                        brojDana = 365;
-                        break;
-
-                    default:
-                        return 0;
-                }
-
         const pocetniDatum = new Date(danas);
-        pocetniDatum.setDate(pocetniDatum.getDate() - brojDana);
         pocetniDatum.setHours(0, 0, 0, 0);
+        let krajPerioda;
 
-                const filtriranaMjerenja = this.dajMjerenja({
-                        energent: energent
-                }).filter(mjerenje => {
-                    return mjerenje.datum >= pocetniDatum &&
-                            mjerenje.datum <= danas;
-                        });
+        switch (period) {
+            case "sedmica": {
+                // getDay() vraća 0 za nedjelju; sedmica počinje ponedjeljkom.
+                const danOdPonedjeljka = (pocetniDatum.getDay() + 6) % 7;
+                pocetniDatum.setDate(pocetniDatum.getDate() - danOdPonedjeljka);
+                krajPerioda = new Date(pocetniDatum);
+                krajPerioda.setDate(krajPerioda.getDate() + 7);
+                break;
+            }
+            case "mjesec":
+                pocetniDatum.setDate(1);
+                krajPerioda = new Date(pocetniDatum);
+                krajPerioda.setMonth(krajPerioda.getMonth() + 1);
+                break;
+            case "godina":
+                pocetniDatum.setMonth(0, 1);
+                krajPerioda = new Date(pocetniDatum);
+                krajPerioda.setFullYear(krajPerioda.getFullYear() + 1);
+                break;
+            default:
+                return 0;
+        }
 
-                if (filtriranaMjerenja.length === 0) {
-                        return 0;
-                }
+        // Gornja granica je početak narednog perioda i nije uključena.
+        const filtriranaMjerenja = this.dajMjerenja({ energent }).filter(mjerenje =>
+            mjerenje.datum >= pocetniDatum && mjerenje.datum < krajPerioda
+        );
 
-                const ukupnaPotrosnja = filtriranaMjerenja.reduce(
-                        (zbir, mjerenje) => zbir + mjerenje.kolicina,0);
+        if (filtriranaMjerenja.length === 0) return 0;
 
-                const prosjek = ukupnaPotrosnja / filtriranaMjerenja.length;
-
-        return Number(prosjek.toFixed(2));
+        const ukupnaPotrosnja = filtriranaMjerenja.reduce(
+            (zbir, mjerenje) => zbir + mjerenje.kolicina, 0
+        );
+        return Number((ukupnaPotrosnja / filtriranaMjerenja.length).toFixed(2));
     },
     detektujAnomalije() {
         
