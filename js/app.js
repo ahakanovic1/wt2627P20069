@@ -175,37 +175,36 @@ function azurirajKartice() {
     karticaStatus.textContent = postojiIncident
         ? "Kritično"
         : "Normalno";
+
+    const opisStatusa = document.querySelector('[data-testid="status-opis"]');
+    if (opisStatusa) {
+        opisStatusa.textContent = postojiIncident
+            ? "Fabrika ima zabilježen incident."
+            : "Postrojenje radi u normalnom režimu.";
+    }
 }
 
 function azurirajEkoloskiCilj(ukupnaEmisija, usteda) {
     const progress = document.querySelector('[data-testid="cilj-napredak"]');
     const napredakTekst = document.querySelector('[data-testid="cilj-napredak-tekst"]');
-    const ustedaTekst = document.querySelector('[data-testid="cilj-usteda"]');
-    const preostaloTekst = document.querySelector('[data-testid="cilj-preostalo"]');
-
-    if (!progress || !napredakTekst || !ustedaTekst || !preostaloTekst) return;
+    if (!progress || !napredakTekst) return;
 
     if (!Number.isFinite(ukupnaEmisija) || !Number.isFinite(usteda) || ukupnaEmisija <= 0) {
         progress.value = 0;
         progress.textContent = "0%";
         napredakTekst.textContent = "—";
-        ustedaTekst.textContent = "";
-        preostaloTekst.textContent = "Nema dovoljno podataka za procjenu ekološkog cilja";
+        progress.setAttribute("aria-label", "Nema dovoljno podataka za procjenu ekološkog cilja");
         return;
     }
 
     const procenatUstede = (usteda / ukupnaEmisija) * 100;
     const napredak = Math.max(0, Math.min(100, (procenatUstede / CILJ_USTEDE_PROCENAT) * 100));
-    const preostalo = Math.max(0, CILJ_USTEDE_PROCENAT - procenatUstede);
     const prikaziProcenat = broj => Number(broj.toFixed(2)).toLocaleString("bs-BA", { maximumFractionDigits: 2 });
 
     progress.value = napredak;
+    progress.setAttribute("aria-label", "Napredak prema ekološkom cilju");
     progress.textContent = `${prikaziProcenat(napredak)}%`;
     napredakTekst.textContent = `${prikaziProcenat(napredak)}%`;
-    ustedaTekst.textContent = `Trenutna procijenjena ušteda: ${prikaziProcenat(procenatUstede)}%`;
-    preostaloTekst.textContent = preostalo === 0
-        ? "Ekološki cilj je ostvaren!"
-        : `Preostalo do cilja: ${prikaziProcenat(preostalo)} procentnih poena`;
 }
 
 function azurirajAnalizu() {
@@ -223,10 +222,19 @@ function azurirajAnalizu() {
         return;
     }
 
-    const mjeseci = ["januaru", "februaru", "martu", "aprilu", "maju", "junu", "julu", "augustu", "septembru", "oktobru", "novembru", "decembru"];
-    const nazivi = { struja: "električne energije", plin: "plina", voda: "vode" };
+    const mjeseci = ["Januar", "Februar", "Mart", "April", "Maj", "Juni", "Juli", "August", "Septembar", "Oktobar", "Novembar", "Decembar"];
     const jedinice = { struja: "kWh", plin: "m³", voda: "m³" };
-    analizaRezultat.textContent = `Najveća prosječna potrošnja ${nazivi[energent]} zabilježena je u ${mjeseci[rezultat.mjesec - 1]} i iznosi ${formatirajBroj(rezultat.prosjek)} ${jedinice[energent]} po mjerenju.`;
+    const naslov = document.createElement("span");
+    naslov.className = "analysis-result-label";
+    naslov.textContent = "MJESEC NAJVEĆE PROSJEČNE POTROŠNJE";
+    const mjesec = document.createElement("strong");
+    mjesec.className = "analysis-result-month";
+    mjesec.textContent = mjeseci[rezultat.mjesec - 1];
+    const potrosnja = document.createElement("p");
+    const vrijednost = document.createElement("strong");
+    vrijednost.textContent = `${formatirajBroj(rezultat.prosjek)} ${jedinice[energent]}`;
+    potrosnja.append(vrijednost, document.createTextNode(" po mjerenju"));
+    analizaRezultat.replaceChildren(naslov, mjesec, potrosnja);
 }
 
 function azurirajBrziPregled() {

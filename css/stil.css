@@ -771,6 +771,7 @@ caption {
 thead th {
     position: sticky;
     top: 0;
+    z-index: 1;
 
     padding: var(--space-md) var(--space-sm);
     background-color: var(--color-primary-deep);
@@ -800,6 +801,7 @@ tbody tr:hover {
 }
 
 .status-badge {
+    position: relative;
     display: inline-block;
     padding: var(--space-2xs) var(--space-sm);
 
@@ -970,6 +972,40 @@ tbody tr:hover {
 .eco-tip #analiza-rezultat,
 .eco-goal .goal-detail {
     margin-top: var(--space-sm);
+}
+
+.analysis-icon svg {
+    width: var(--icon-size);
+    height: var(--icon-size);
+    fill: none;
+    stroke: var(--color-valid);
+    stroke-width: 1.8;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+.eco-tip .analysis-result {
+    margin-top: var(--space-md);
+    padding: var(--space-sm);
+    border: var(--border-width) solid var(--color-border);
+    border-radius: var(--radius-small);
+    background-color: var(--color-surface);
+    color: var(--color-text);
+    font-size: var(--font-size-small);
+    overflow-wrap: anywhere;
+}
+
+.analysis-result-label {
+    display: block;
+    color: var(--color-text-secondary);
+    font-size: var(--font-size-xs);
+    font-weight: 700;
+}
+
+.analysis-result-month {
+    display: block;
+    margin: var(--space-xs) 0;
+    font-size: var(--font-size-lg);
 }
 
 .eco-goal .goal-description {

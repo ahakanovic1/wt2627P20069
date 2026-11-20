@@ -73,7 +73,7 @@
                 <span class="stat-icon" aria-hidden="true">✓</span>
                 <h3>Status Fabrike</h3>
                 <p data-testid="kartica-status">Aktivno</p>
-                <small>Postrojenje radi u normalnom režimu</small>
+                <small data-testid="status-opis">Postrojenje radi u normalnom režimu.</small>
             </article>
 
         </section>
@@ -160,7 +160,6 @@
 
                     <thead>
                         <tr>
-                            <th scope="col">#</th>
                             <th scope="col">Datum</th>
                             <th scope="col">Energent</th>
                             <th scope="col">Količina</th>
@@ -172,7 +171,6 @@
 
                     <tbody>
                         <tr>
-                            <th scope="row">1</th>
                             <td data-column="datum"><time datetime="2026-11-03">03.11.2026.</time></td>
                             <td data-column="energent">Struja</td>
                             <td data-column="kolicina">125,50 kWh</td>
@@ -185,7 +183,6 @@
                             </td>
                         </tr>
                         <tr>
-                            <th scope="row">2</th>
                             <td data-column="datum"><time datetime="2026-11-01">01.11.2026.</time></td>
                             <td data-column="energent">Plin</td>
                             <td data-column="kolicina">35,00 m³</td>
@@ -198,7 +195,6 @@
                             </td>
                         </tr>
                         <tr>
-                            <th scope="row">3</th>
                             <td data-column="datum"><time datetime="2026-10-28">28.10.2026.</time></td>
                             <td data-column="energent">Voda</td>
                             <td data-column="kolicina">4,20 m³</td>
@@ -211,7 +207,6 @@
                         </td>
                         </tr>
                         <tr>
-                            <th scope="row">4</th>
                             <td data-column="datum"><time datetime="2026-10-25">25.10.2026.</time></td>
                             <td data-column="energent">Struja</td>
                             <td data-column="kolicina">98,30 kWh</td>
@@ -224,7 +219,6 @@
                             </td>
                         </tr>
                         <tr>
-                            <th scope="row">5</th>
                             <td data-column="datum"><time datetime="2026-10-20">20.10.2026.</time></td>
                             <td data-column="energent">Plin</td>
                             <td data-column="kolicina">42,00 m³</td>
@@ -236,7 +230,6 @@
                                 </label></td>
                         </tr>
                         <tr>
-                            <th scope="row">6</th>
                             <td data-column="datum"><time datetime="2026-10-15">15.10.2026.</time></td>
                             <td data-column="energent">Voda</td>
                             <td data-column="kolicina">5,10 m³</td>
@@ -249,7 +242,6 @@
                             </td>
                         </tr>
                         <tr>
-                            <th scope="row">7</th>
                             <td data-column="datum"><time datetime="2026-10-12">12.10.2026.</time></td>
                             <td data-column="energent">Struja</td>
                             <td data-column="kolicina">110,75 kWh</td>
@@ -262,7 +254,6 @@
                             </td>
                         </tr>
                         <tr>
-                            <th scope="row">8</th>
                             <td data-column="datum"><time datetime="2026-10-08">08.10.2026.</time></td>
                             <td data-column="energent">Plin</td>
                             <td data-column="kolicina">38,50 m³</td>
@@ -275,7 +266,6 @@
                             </td>
                         </tr>
                         <tr>
-                            <th scope="row">9</th>
                             <td data-column="datum"><time datetime="2026-10-03">03.10.2026.</time></td>
                             <td data-column="energent">Struja</td>
                             <td data-column="kolicina">142,00 kWh</td>
@@ -285,6 +275,7 @@
                                     <input type="checkbox" class="sr-only" checked disabled>
                                                 Incident
                                 </label>
+                            </td>
                         </tr>
                     </tbody>
                 </table>
@@ -323,18 +314,18 @@
 
             <section class="eco-tip" aria-labelledby="analiza-title">
                 <h2 id="analiza-title">
-                    <span class="sidebar-icon"><img src="slike/eko-recikliranje.png" alt=""></span>
-                    Analiza potrošnje energenata
+                    <span class="sidebar-icon analysis-icon" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><path d="M4 20h16M6 17v-5h3v5M11 17V7h3v10M16 17V4h3v13"/></svg></span>
+                    Analiza Sezonalnosti
                 </h2>
-                <p>Saznaj u kojem mjesecu je prosječna potrošnja odabranog energenta bila najveća.</p>
+                <p>Mjesec s najvećim prosjekom potrošnje po energentu.</p>
                 <label for="analiza-energent">Odaberi energent</label>
                 <select id="analiza-energent" data-testid="analiza-energent" aria-describedby="analiza-rezultat">
-                    <option value="">Odaberi energent</option>
+                    <option value="">Izaberi energent</option>
                     <option value="struja">Struja</option>
                     <option value="plin">Plin</option>
                     <option value="voda">Voda</option>
                 </select>
-                <p id="analiza-rezultat" data-testid="analiza-rezultat" aria-live="polite">Odaberite energent za prikaz analize potrošnje.</p>
+                <div id="analiza-rezultat" class="analysis-result" data-testid="analiza-rezultat" aria-live="polite">Odaberite energent za prikaz analize potrošnje.</div>
             </section>
 
             <section class="eco-goal" aria-labelledby="eco-goal-title">
@@ -342,14 +333,12 @@
                     <span class="sidebar-icon"><img src="slike/zastavica-cilj.png" alt=""></span>
                     Tvoj ekološki cilj
                 </h2>
-                <p class="goal-description">Ostvariti uštedu od najmanje 25% ukupne evidentirane emisije CO₂.</p>
+                <p class="goal-description">Smanjiti emisiju CO₂ za 25% u odnosu na prethodni period.</p>
                 <progress class="goal-progress" data-testid="cilj-napredak" value="0" max="100" aria-label="Napredak prema ekološkom cilju">0%</progress>
                 <p class="goal-progress-label">
-                    <span>Napredak prema cilju</span>
+                    <span>Ostvareni napredak</span>
                     <strong data-testid="cilj-napredak-tekst">—</strong>
                 </p>
-                <p class="goal-detail" data-testid="cilj-usteda"></p>
-                <p class="goal-detail" data-testid="cilj-preostalo" aria-live="polite">Nema dovoljno podataka za procjenu ekološkog cilja</p>
             </section>
 
         </aside>
